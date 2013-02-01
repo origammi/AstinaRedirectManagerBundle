@@ -1,0 +1,19 @@
+Astina\RedirectManagerBundle\Entity\Map:
+    type: entity
+    table: redirect_map
+    repositoryClass: Astina\RedirectManagerBundle\Entity\MapRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        urlFrom:
+            type: string
+            length: 255
+        urlTo:
+            type: string
+            length: 255
+        count:
+            type: integer
+    lifecycleCallbacks: {  }

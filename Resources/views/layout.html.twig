@@ -1,0 +1,21 @@
+{% trans_default_domain "AstinaRedirectManagerBundle" %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Astina redirect Manager</title>
+    </head>
+    <body>
+        {% for key, message in app.session.getFlashes() %}
+        <div class="alert alert-{{ key }}">
+            {{ message | trans }}
+        </div>
+        {% endfor %}
+
+        <div>
+            {% block astina_redirect_manager_content %}
+            {% endblock astina_redirect_manager_content %}
+        </div>
+    </body>
+</html>

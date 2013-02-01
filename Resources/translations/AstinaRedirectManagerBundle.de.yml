@@ -1,0 +1,17 @@
+mapping:
+  flash:
+    map_created:
+      success: "Redirection created successfully."
+      error: "Can't create redirection."
+
+form:
+  urlFrom: "From URL"
+  urlTo: "To URL"
+  submit: "Create"
+
+list:
+  new: "New"
+  url:
+    from: "From URL"
+    to:   "To URL"
+  count: "Redirect events"

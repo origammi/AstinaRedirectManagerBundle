@@ -1,0 +1,7 @@
+parameters:
+#    astina_redirect_manager.example.class: Astina\RedirectManagerBundle\Example
+
+services:
+#    astina_redirect_manager.example:
+#        class: %astina_redirect_manager.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
