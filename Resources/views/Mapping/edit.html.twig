@@ -1,0 +1,10 @@
+{% extends "AstinaRedirectManagerBundle::layout.html.twig" %}
+{% trans_default_domain "AstinaRedirectManagerBundle" %}
+
+{% block armb_content  %}
+    <form action="{{ path('armb_update_map', {id:1}) }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+
+        <input class="btn btn-primary" type="submit" value= "{{ "form.save" | trans }}" />
+    </form>
+{% endblock %}

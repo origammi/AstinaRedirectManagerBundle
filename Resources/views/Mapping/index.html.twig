@@ -24,8 +24,8 @@
                     </td>
                     <td>{{ map.count }}</td>
                     <td>
-                        <a href="#" class="btn btn-info btn"><i class="icon-edit"></i></a>
-                        <a href="#" class="btn btn-danger btn"><i class="icon-remove"></i></a>
+                        <a href="{{ path('armb_edit_map', {id:map.id}) }}" class="btn btn-info btn"><i class="icon-edit"></i></a>
+                        <a href="#myModal" class="delete btn btn-danger btn" data-toggle="modal" data-deleteurl="{{ path('armb_delete_map', {id:map.id}) }}"><i class="icon-remove"></i></a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -38,4 +38,18 @@
             <a href="{{ path('armb_new_map') }}" class="btn btn-large btn-primary btn">{{ 'list.no_redirects.button' | trans }}</a>
         </div>
     {% endif %}
+    <!-- Modal -->
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">{{ 'modal.delete.title' | trans }}</h3>
+        </div>
+        <div class="modal-body">
+            <p>{{ 'modal.delete.message' | trans }}</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">{{ 'modal.delete.close' | trans }}</button>
+            <button class="btn btn-primary delete">{{ 'modal.delete.yes' | trans }}</button>
+        </div>
+    </div>
 {% endblock %}

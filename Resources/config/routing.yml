@@ -11,3 +11,19 @@ armb_create_map:
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:create }
     requirements:
         _method:  POST
+
+armb_edit_map:
+    pattern:  /{id}/edit
+    defaults: { _controller: AstinaRedirectManagerBundle:Mapping:edit }
+
+armb_update_map:
+    pattern:  /{id}/update
+    defaults: { _controller: AstinaRedirectManagerBundle:Mapping:update }
+    requirements:
+        _method:  POST
+
+armb_delete_map:
+    pattern:  /{id}/delete
+    defaults: { _controller: AstinaRedirectManagerBundle:Mapping:delete }
+    requirements:
+        _method:  POST
