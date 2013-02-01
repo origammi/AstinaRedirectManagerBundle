@@ -1,6 +1,6 @@
 Astina\RedirectManagerBundle\Entity\Map:
     type: entity
-    table: redirect_map
+    table: armb_redirect_map
     repositoryClass: Astina\RedirectManagerBundle\Entity\MapRepository
     fields:
         id:
@@ -10,6 +10,7 @@ Astina\RedirectManagerBundle\Entity\Map:
                 strategy: AUTO
         urlFrom:
             type: string
+            unique: true
             length: 255
         urlTo:
             type: string

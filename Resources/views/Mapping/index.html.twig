@@ -1,24 +1,36 @@
 {% extends "AstinaRedirectManagerBundle::layout.html.twig" %}
 {% trans_default_domain "AstinaRedirectManagerBundle" %}
 
-{% block astina_redirect_manager_content  %}
-    <a href="{{ path('astina_rm_new_map') }}" class="btn btn-primary">{{ 'list.new' | trans }}</a>
-    <table class="table table-condensed">
-        <thead>
-            <tr>
-                <th>{{ 'list.url.from' | trans }}</th>
-                <th>{{ 'list.url.to' | trans }}</th>
-                <th>{{ 'list.count' | trans }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for map in maps %}
-            <tr>
-                <td>{{ map.urlFrom }}</td>
-                <td>{{ map.urlTo }}</td>
-                <td>{{ map.count }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+{% block armb_content  %}
+    {% if maps | length > 0 %}
+        <a href="{{ path('armb_new_map') }}" class="btn btn-primary pull-right">{{ 'list.new' | trans }}</a>
+        <table class="table table-condensed">
+            <thead>
+                <tr>
+                    <th>{{ 'list.url.from' | trans }}</th>
+                    <th>{{ 'list.url.to' | trans }}</th>
+                    <th>{{ 'list.count' | trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for map in maps %}
+                <tr>
+                    <td>
+                        <a target="_blank" href="{{ map.urlFrom }}">{{ map.urlFrom }}</a>
+                    </td>
+                    <td>
+                        <a target="_blank" href="{{ map.urlTo }}">{{ map.urlTo }}</a>
+                    </td>
+                    <td>{{ map.count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-block">
+            <h4>{{ 'list.no_redirects.title' | trans }}</h4>
+            <p>{{ 'list.no_redirects.description' | trans }}</p>
+            <a href="{{ path('armb_new_map') }}" class="btn btn-large btn-primary btn">{{ 'list.no_redirects.button' | trans }}</a>
+        </div>
+    {% endif %}
 {% endblock %}

@@ -15,3 +15,7 @@ list:
     from: "From URL"
     to:   "To URL"
   count: "Redirect events"
+  no_redirects:
+    title: "No redirects found!"
+    description: "There are no redirects in the database. You should create one."
+    button: "Start redirecting now!"

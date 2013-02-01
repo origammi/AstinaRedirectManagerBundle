@@ -111,4 +111,16 @@ class Map
     {
         return $this->count;
     }
+
+    /**
+     * Increases count by one.
+     *
+     * @return Map
+     */
+    public function increaseCount()
+    {
+        $this->count++;
+
+        return $this;
+    }
 }

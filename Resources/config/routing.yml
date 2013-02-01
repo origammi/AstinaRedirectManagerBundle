@@ -1,12 +1,12 @@
-astina_rm_homepage:
+armb_homepage:
     pattern:  /
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:index }
 
-astina_rm_new_map:
+armb_new_map:
     pattern:  /new
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:new }
 
-astina_rm_create_map:
+armb_create_map:
     pattern:  /create
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:create }
     requirements:

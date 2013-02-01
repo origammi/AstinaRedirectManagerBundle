@@ -60,7 +60,7 @@ class MappingController extends Controller
 
             $this->setFlash('success', 'mapping.flash.map_created.success');
 
-            return $this->redirect($this->generateUrl('astina_rm_homepage'));
+            return $this->redirect($this->generateUrl('armb_homepage'));
         } else {
             $this->setFlash('error', 'mapping.flash.map_created.error');
 

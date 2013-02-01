@@ -1,8 +1,8 @@
 {% extends "AstinaRedirectManagerBundle::layout.html.twig" %}
 {% trans_default_domain "AstinaRedirectManagerBundle" %}
 
-{% block astina_redirect_manager_content  %}
-    <form action="{{ path('astina_rm_create_map') }}" method="post" {{ form_enctype(form) }}>
+{% block armb_content  %}
+    <form action="{{ path('armb_create_map') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
 
         <input class = "btn btn-primary" type="submit" value= "{{ "form.submit" | trans }}" />

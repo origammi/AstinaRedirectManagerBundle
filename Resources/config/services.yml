@@ -1,7 +1,9 @@
 parameters:
-#    astina_redirect_manager.example.class: Astina\RedirectManagerBundle\Example
+    armb.redirect.class: Astina\RedirectManagerBundle\EventListener\RedirectListener
 
 services:
-#    astina_redirect_manager.example:
-#        class: %astina_redirect_manager.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    armb.router:
+        class: %armb.redirect.class%
+        arguments: [@doctrine]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
