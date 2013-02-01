@@ -19,6 +19,13 @@ class MapFormType extends AbstractType
         ;
     }
 
+    /**
+     * Returns default options for form type.
+     *
+     * @param array $options
+     *
+     * @return array
+     */
     public function getDefaultOptions(array $options)
     {
         return array(
@@ -31,6 +38,6 @@ class MapFormType extends AbstractType
      */
     public function getName()
     {
-        return 'astina_redirect_manager_bundle_map';
+        return 'armb_map_type';
     }
 }
