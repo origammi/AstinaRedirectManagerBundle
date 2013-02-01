@@ -15,7 +15,7 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new FOS\UserBundle\FOSUserBundle(),
+        new Astina\RedirectManagerBundle\AstinaRedirectManagerBundle(),
     );
 }
 ```
