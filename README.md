@@ -1,7 +1,7 @@
 Astina Redirect Manager Bundle
 ==============================
 
-##Install
+## Install
 
 ### Step 1: Enable the bundle
 
@@ -20,7 +20,9 @@ public function registerBundles()
 }
 ```
 
-### Step 2: Import routing files
+### Step 2: Import routing file
+
+Import routing file of bundle. Change prefix attribute to suit your needs.
 
 In YAML:
 
@@ -41,4 +43,10 @@ sure you have translator enabled in your config.
 
 framework:
     translator: ~
+```
+
+### Step 4: Update your DB schema
+
+``` bash
+$ php app/console doctrine:schema:update --force
 ```
