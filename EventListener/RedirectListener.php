@@ -20,6 +20,9 @@ class RedirectListener
      */
     private $doctrine;
 
+    /**
+     * @param RegistryInterface $doctrine
+     */
     public function __construct(RegistryInterface $doctrine)
     {
         $this->doctrine = $doctrine;
