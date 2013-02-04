@@ -64,7 +64,7 @@ class MappingController extends Controller
         } else {
             $this->setFlash('error', 'mapping.flash.map_created.error');
 
-            return $this->redirect($this->generateUrl("astina_new_map"));
+            return $this->redirect($this->generateUrl('astina_new_map'));
         }
     }
 
@@ -78,7 +78,7 @@ class MappingController extends Controller
     public function editAction($id)
     {
         $form = $this->createForm(new MapFormType());
-        $map = $this->getMapRepository()->findOneById($id);
+        $map = $this->getMapRepository()->find($id);
 
         return array(
             'form' => $form->setData($map)->createView(),
@@ -93,7 +93,7 @@ class MappingController extends Controller
      */
     public function updateAction($id)
     {
-        $map = $this->getMapRepository()->findOneById($id);
+        $map = $this->getMapRepository()->find($id);
 
         $form = $this->createForm(new MapFormType(), $map);
         $form->bind($this->getRequest());
@@ -108,7 +108,7 @@ class MappingController extends Controller
         } else {
             $this->setFlash('error', 'mapping.flash.map_updated.error');
 
-            return $this->redirect($this->generateUrl("astina_edit_map", array('id' => $id)));
+            return $this->redirect($this->generateUrl('astina_edit_map', array('id' => $id)));
         }
     }
 
@@ -119,7 +119,7 @@ class MappingController extends Controller
      */
     public function deleteAction($id)
     {
-        $map = $this->getMapRepository()->findOneById($id);
+        $map = $this->getMapRepository()->find($id);
 
         if ($map) {
             $em  = $this->getEm();
@@ -132,7 +132,7 @@ class MappingController extends Controller
         } else {
             $this->setFlash('error', 'mapping.flash.map_deleted.error');
 
-            return $this->redirect($this->generateUrl("armb_homepage"));
+            return $this->redirect($this->generateUrl('armb_homepage'));
         }
     }
 
