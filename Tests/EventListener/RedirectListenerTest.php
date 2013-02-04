@@ -2,36 +2,94 @@
 namespace Astina\RedirectManagerBundle\Tests\EventListener;
 
 use Astina\RedirectManagerBundle\EventListener\RedirectListener;
+use Astina\RedirectManagerBundle\Entity\Map;
 
 class RedirectListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var RedirectListener
+     * This code would raise an error if would't be set properly.
      */
-    private $redirectListener;
-
-    public function setUp()
+    public function testIfPostRequestAreSkipped()
     {
-        $doctrine = $this
+        $doctrineMock = $this
+            ->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $redirectListener = new RedirectListener($doctrineMock);
+
+        $event = $this->getResponseEventMock('POST');
+
+        $redirectListener->onKernelRequest($event);
+
+        $this->assertTrue(true, "Method doesn't work properly on POST request.");
+    }
+
+    /**
+     * Tests if method is working properly and if all mocks all called properly.
+     */
+    public function testIfListenerSetProperRedirect()
+    {
+        $map = new Map();
+        $map
+            ->setUrlFrom('/something')
+            ->setUrlTo('/somewhere')
+        ;
+
+        $repoMock = $this
+            ->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')
+            ->getMock()
+        ;
+
+        $repoMock
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->will($this->returnValue($map))
+        ;
+
+        $managerMock = $this
+            ->getMockBuilder('\Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $managerMock
+            ->expects($this->once())
+            ->method('persist')
+            ->with($map)
+        ;
+
+        $doctrineMock = $this
             ->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
             ->disableOriginalConstructor()
             ->setMethods(array('getRepository', 'getManager'))
             ->getMock()
         ;
 
-        $this->redirectListener = new RedirectListener($doctrine);
-    }
+        $doctrineMock
+            ->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($repoMock))
+        ;
 
-    /**
-     * This code would raise an error if would't be set properly.
-     */
-    public function testIfPostRequestAreSkipped()
-    {
-        $event = $this->getResponseEventMock('POST');
+        $doctrineMock
+            ->expects($this->any())
+            ->method('getManager')
+            ->will($this->returnValue($managerMock))
+        ;
 
-        $this->redirectListener->onKernelRequest($event);
+        $redirectListener = new RedirectListener($doctrineMock);
 
-        $this->assertTrue(true, "Method doesn't work properly on POST request.");
+        $eventMock = $this->getResponseEventMock('GET');
+
+        $eventMock
+            ->expects($this->once())
+            ->method('setResponse')
+        ;
+
+
+        $redirectListener->onKernelRequest($eventMock);
     }
 
     /**
