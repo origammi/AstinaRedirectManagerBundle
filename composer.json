@@ -1,0 +1,10 @@
+{
+	"name": "astina/redirect-manager-bundle",
+	"type": "symfony-bundle",
+	"autoload": {
+		"psr-0": {
+			"Astina\\Bundle\\RedirectManagerBundle": ""
+		}
+	},
+	"target-dir": "Astina/Bundle/RedirectManagerBundle"
+}
