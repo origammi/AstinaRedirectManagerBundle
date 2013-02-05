@@ -29,7 +29,7 @@ class MapFormType extends AbstractType
     public function getDefaultOptions(array $options)
     {
         return array(
-            'data_class' => 'Astina\RedirectManagerBundle\Entity\Map'
+            'data_class' => 'Astina\Bundle\RedirectManagerBundle\Entity\Map'
         );
     }
 

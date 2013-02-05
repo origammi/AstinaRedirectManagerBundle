@@ -1,7 +1,7 @@
-Astina\RedirectManagerBundle\Entity\Map:
+Astina\Bundle\RedirectManagerBundle\Entity\Map:
     type: entity
     table: armb_redirect_map
-    repositoryClass: Astina\RedirectManagerBundle\Entity\MapRepository
+    repositoryClass: Astina\Bundle\RedirectManagerBundle\Entity\MapRepository
     fields:
         id:
             type: integer

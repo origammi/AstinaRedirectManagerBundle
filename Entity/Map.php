@@ -5,7 +5,7 @@ namespace Astina\Bundle\RedirectManagerBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Astina\RedirectManagerBundle\Entity\Map
+ * Astina\Bundle\RedirectManagerBundle\Entity\Map
  */
 class Map
 {

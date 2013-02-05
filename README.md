@@ -3,7 +3,16 @@ Astina Redirect Manager Bundle
 
 ## Install
 
-### Step 1: Enable the bundle
+### Step 1: Add to composer.json
+
+```
+"require" :  {
+    // ...
+    "astina/redirect-manager-bundle":"dev-master",
+}
+```
+
+### Step 2: Enable the bundle
 
 Enable the bundle in the kernel:
 
@@ -15,12 +24,12 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new Astina\RedirectManagerBundle\AstinaRedirectManagerBundle(),
+        new Astina\Bundle\RedirectManagerBundle\AstinaRedirectManagerBundle(),
     );
 }
 ```
 
-### Step 2: Import routing file
+### Step 3: Import routing file
 
 Import routing file of bundle. Change prefix attribute to suit your needs.
 
@@ -33,7 +42,7 @@ astina_redirect_manager:
     prefix:   /redirect/
 ```
 
-### Step 3: Translations
+### Step 4: Translations
 
 If you wish to use default texts provided in this bundle, you have to make
 sure you have translator enabled in your config.
@@ -45,7 +54,7 @@ framework:
     translator: ~
 ```
 
-### Step 4: Update your DB schema
+### Step 5: Update your DB schema
 
 ``` bash
 $ php app/console doctrine:schema:update --force

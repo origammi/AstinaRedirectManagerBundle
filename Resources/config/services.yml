@@ -1,5 +1,5 @@
 parameters:
-    armb.redirect.class: Astina\RedirectManagerBundle\EventListener\RedirectListener
+    armb.redirect.class: Astina\Bundle\RedirectManagerBundle\EventListener\RedirectListener
 
 services:
     armb.router:
