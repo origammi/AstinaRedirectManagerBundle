@@ -1,0 +1,35 @@
+mapping:
+  flash:
+    map_created:
+      success: "Redirection created successfully."
+      error: "Can't create redirection."
+    map_updated:
+      success: "Redirection updated successfully."
+      error: "Can't update redirection."
+    map_deleted:
+      success: "Redirection deleted successfully."
+      error: "Can't delete redirection."
+
+form:
+  urlFrom: "From URL"
+  urlTo: "To URL"
+  submit: "Create"
+  save: "Save"
+
+list:
+  new: "New"
+  url:
+    from: "From URL"
+    to:   "To URL"
+  count: "Redirect events"
+  no_redirects:
+    title: "No redirects found!"
+    description: "There are no redirects in the database. You should create one."
+    button: "Start redirecting now!"
+
+modal:
+  delete:
+    title: "Delete redirection"
+    message: "Are you sure you want to delete this redirection?"
+    close: "Close"
+    yes: "Yes"

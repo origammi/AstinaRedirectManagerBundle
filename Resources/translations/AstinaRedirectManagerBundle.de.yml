@@ -1,35 +1,35 @@
 mapping:
   flash:
     map_created:
-      success: "Redirection created successfully."
-      error: "Can't create redirection."
+      success: "Weiterleitung erstellt."
+      error: "Weiterleitung konnte nicht erstellt werden."
     map_updated:
-      success: "Redirection updated successfully."
-      error: "Can't update redirection."
+      success: "Weiterleitung aktualisiert."
+      error: "Weiterleitung konnte nicht aktualisiert werden."
     map_deleted:
-      success: "Redirection deleted successfully."
-      error: "Can't delete redirection."
+      success: "Weiterleitung gelöscht."
+      error: "Weiterleitung konnte nicht gelöscht werden."
 
 form:
-  urlFrom: "From URL"
-  urlTo: "To URL"
-  submit: "Create"
-  save: "Save"
+  urlFrom: "Von URL"
+  urlTo: "Zu URL"
+  submit: "Erstellen"
+  save: "Speichern"
 
 list:
-  new: "New"
+  new: "Neu"
   url:
-    from: "From URL"
-    to:   "To URL"
-  count: "Redirect events"
+    from: "Von URL"
+    to:   "Zu URL"
+  count: "Anzahl Weiterleitungen"
   no_redirects:
-    title: "No redirects found!"
-    description: "There are no redirects in the database. You should create one."
-    button: "Start redirecting now!"
+    title: "Keine Weiterleitungen gefunden!"
+    description: "Es sind keine Weiterleitungen erfasst."
+    button: "Jetzt Weiterleitungen erfassen!"
 
 modal:
   delete:
-    title: "Delete redirection"
-    message: "Are you sure you want to delete this redirection?"
-    close: "Close"
-    yes: "Yes"
+    title: "Weiterleitungen löschen"
+    message: "Weiterleitungen wirklich löschen?"
+    close: "Schliessen"
+    yes: "ja"
