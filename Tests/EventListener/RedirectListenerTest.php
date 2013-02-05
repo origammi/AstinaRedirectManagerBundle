@@ -88,8 +88,9 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setResponse')
         ;
 
-
         $redirectListener->onKernelRequest($eventMock);
+
+        $this->assertEquals(1, $map->getCount(), 'Map count should be increased to 1.');
     }
 
     /**
