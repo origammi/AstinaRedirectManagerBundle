@@ -1,11 +1,11 @@
 <?php
 
-namespace Astina\RedirectManagerBundle\Controller;
+namespace Astina\Bundle\RedirectManagerBundle\Controller;
 
-use Astina\RedirectManagerBundle\Entity\MapRepository;
-use Astina\RedirectManagerBundle\Entity\Map;
+use Astina\Bundle\RedirectManagerBundle\Entity\MapRepository;
+use Astina\Bundle\RedirectManagerBundle\Entity\Map;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Astina\RedirectManagerBundle\Form\Type\MapFormType;
+use Astina\Bundle\RedirectManagerBundle\Form\Type\MapFormType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 

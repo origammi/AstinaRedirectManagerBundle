@@ -1,6 +1,6 @@
 <?php
 
-namespace Astina\RedirectManagerBundle\Entity;
+namespace Astina\Bundle\RedirectManagerBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Astina\RedirectManagerBundle\Form\Type;
+namespace Astina\Bundle\RedirectManagerBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

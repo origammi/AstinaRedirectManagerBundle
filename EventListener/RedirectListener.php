@@ -1,9 +1,9 @@
 <?php
 
-namespace Astina\RedirectManagerBundle\EventListener;
+namespace Astina\Bundle\RedirectManagerBundle\EventListener;
 
-use Astina\RedirectManagerBundle\Entity\MapRepository;
-use Astina\RedirectManagerBundle\Entity\Map;
+use Astina\Bundle\RedirectManagerBundle\Entity\MapRepository;
+use Astina\Bundle\RedirectManagerBundle\Entity\Map;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Routing\RouterInterface;

@@ -1,8 +1,8 @@
 <?php
-namespace Astina\RedirectManagerBundle\Tests\EventListener;
+namespace Astina\Bundle\RedirectManagerBundle\Tests\EventListener;
 
-use Astina\RedirectManagerBundle\EventListener\RedirectListener;
-use Astina\RedirectManagerBundle\Entity\Map;
+use Astina\Bundle\RedirectManagerBundle\EventListener\RedirectListener;
+use Astina\Bundle\RedirectManagerBundle\Entity\Map;
 
 class RedirectListenerTest extends \PHPUnit_Framework_TestCase
 {

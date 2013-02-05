@@ -1,6 +1,6 @@
 <?php
 
-namespace Astina\RedirectManagerBundle\DependencyInjection;
+namespace Astina\Bundle\RedirectManagerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
