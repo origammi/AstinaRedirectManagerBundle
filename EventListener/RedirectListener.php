@@ -6,6 +6,7 @@ use Astina\Bundle\RedirectManagerBundle\Entity\MapRepository;
 use Astina\Bundle\RedirectManagerBundle\Entity\Map;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
@@ -33,24 +34,31 @@ class RedirectListener
      */
     public function onKernelRequest(GetResponseEvent $event)
     {
-        $request = $event->getRequest();
-
-        if ($request->getMethod() != "GET") {
+        if (HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
             return;
         }
 
+        $request = $event->getRequest();
+
+        if ($request->getMethod() != 'GET') {
+            return;
+        }
+
+        /** @var $map Map */
         $map = $this->getMapRepository()->findOneBy(array('urlFrom' => $request->getRequestUri()));
 
-        if ($map instanceof Map) {
-            $map->increaseCount();
-
-            $response = new RedirectResponse($map->getUrlTo());
-
-            $event->setResponse($response);
-
-            $this->getEm()->persist($map);
-            $this->getEm()->flush();
+        if (null == $map) {
+            return;
         }
+
+        $map->increaseCount();
+
+        $response = new RedirectResponse($map->getUrlTo());
+
+        $event->setResponse($response);
+
+        $this->getEm()->persist($map);
+        $this->getEm()->flush();
     }
 
     /**
