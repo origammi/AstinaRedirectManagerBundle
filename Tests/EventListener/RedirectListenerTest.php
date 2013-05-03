@@ -97,7 +97,7 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $requestMethod
      *
-     * @return Symfony\Component\HttpKernel\Event\GetResponseEvent
+     * @return \Symfony\Component\HttpKernel\Event\GetResponseEvent
      */
     private function getResponseEventMock($requestMethod)
     {
@@ -120,7 +120,7 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $method
      *
-     * @return Symfony\Component\HttpFoundation\Request
+     * @return \Symfony\Component\HttpFoundation\Request
      */
     private function getRequestMock($method)
     {

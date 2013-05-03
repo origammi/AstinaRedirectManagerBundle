@@ -17,4 +17,9 @@ Astina\Bundle\RedirectManagerBundle\Entity\Map:
             length: 255
         count:
             type: integer
+        countRedirects:
+            type: boolean
+        redirectHttpCode:
+            type: string
+            length: 3
     lifecycleCallbacks: {  }

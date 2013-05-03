@@ -51,14 +51,15 @@ class RedirectListener
             return;
         }
 
-        $map->increaseCount();
-
-        $response = new RedirectResponse($map->getUrlTo());
-
+        $response = new RedirectResponse($map->getUrlTo(), $map->getRedirectHttpCode());
         $event->setResponse($response);
 
-        $this->getEm()->persist($map);
-        $this->getEm()->flush();
+        if ($map->isCountRedirects()) {
+            $map->increaseCount();
+            $em = $this->getEm();
+            $em->persist($map);
+            $em->flush();
+        }
     }
 
     /**

@@ -29,6 +29,16 @@ class Map
      */
     private $count = 0;
 
+    /**
+     * Whether to count redirects or not
+     * @var bool
+     */
+    private $countRedirects = true;
+
+    /**
+     * @var int
+     */
+    private $redirectHttpCode = 302;
 
     /**
      * Get id
@@ -122,5 +132,47 @@ class Map
         $this->count++;
 
         return $this;
+    }
+
+    /**
+     * @param boolean $countRedirects
+     * @return Map
+     */
+    public function setCountRedirects($countRedirects)
+    {
+        $this->countRedirects = $countRedirects;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCountRedirects()
+    {
+        return $this->countRedirects;
+    }
+
+    /**
+     * @param int $redirectHttpCode
+     * @return Map
+     * @throws \Exception
+     */
+    public function setRedirectHttpCode($redirectHttpCode)
+    {
+        if (!preg_match('/^30[0-8]$/', $redirectHttpCode)) {
+            throw new \Exception('Invalid redirect HTTP code');
+        }
+        $this->redirectHttpCode = $redirectHttpCode;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRedirectHttpCode()
+    {
+        return $this->redirectHttpCode;
     }
 }
