@@ -136,10 +136,13 @@ class Map
 
     /**
      * @param boolean $countRedirects
+     * @return Map
      */
     public function setCountRedirects($countRedirects)
     {
         $this->countRedirects = $countRedirects;
+
+        return $this;
     }
 
     /**
@@ -152,6 +155,7 @@ class Map
 
     /**
      * @param int $redirectHttpCode
+     * @return Map
      * @throws \Exception
      */
     public function setRedirectHttpCode($redirectHttpCode)
@@ -160,6 +164,8 @@ class Map
             throw new \Exception('Invalid redirect HTTP code');
         }
         $this->redirectHttpCode = $redirectHttpCode;
+
+        return $this;
     }
 
     /**
