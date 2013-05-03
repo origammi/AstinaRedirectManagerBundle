@@ -45,13 +45,18 @@ class RedirectListener
         }
 
         /** @var $map Map */
-        $map = $this->getMapRepository()->findOneBy(array('urlFrom' => $request->getRequestUri()));
+        $map = $this->getMapRepository()->findOneBy(array('urlFrom' => $request->getPathInfo()));
 
         if (null == $map) {
             return;
         }
 
-        $response = new RedirectResponse($map->getUrlTo(), $map->getRedirectHttpCode());
+        $url = $map->getUrlTo();
+        if ($baseUrl = $request->getBaseUrl()) {
+            $url = $baseUrl . $url;
+        }
+
+        $response = new RedirectResponse($url, $map->getRedirectHttpCode());
         $event->setResponse($response);
 
         if ($map->isCountRedirects()) {
