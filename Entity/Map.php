@@ -31,6 +31,7 @@ class Map
 
     /**
      * Whether to count redirects or not
+     *
      * @var bool
      */
     private $countRedirects = true;
