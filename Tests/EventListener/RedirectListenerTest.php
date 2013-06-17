@@ -3,7 +3,15 @@ namespace Astina\Bundle\RedirectManagerBundle\Tests\EventListener;
 
 use Astina\Bundle\RedirectManagerBundle\EventListener\RedirectListener;
 use Astina\Bundle\RedirectManagerBundle\Entity\Map;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
+/**
+ * Class RedirectListenerTest
+ *
+ * @package   Astina\Bundle\RedirectManagerBundle\Tests\EventListener
+ * @author    Matej Velikonja <mvelikonja@astina.ch>
+ * @copyright 2013 Astina AG (http://astina.ch)
+ */
 class RedirectListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -12,7 +20,7 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
     public function testIfPostRequestAreSkipped()
     {
         $doctrineMock = $this
-            ->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
+            ->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
             ->disableOriginalConstructor()
             ->getMock()
         ;
@@ -61,9 +69,8 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
         ;
 
         $doctrineMock = $this
-            ->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
+            ->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
             ->disableOriginalConstructor()
-            ->setMethods(array('getRepository', 'getManager'))
             ->getMock()
         ;
 
@@ -74,7 +81,7 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
         ;
 
         $doctrineMock
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getManager')
             ->will($this->returnValue($managerMock))
         ;
@@ -86,6 +93,12 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
         $eventMock
             ->expects($this->once())
             ->method('setResponse')
+        ;
+
+        $eventMock
+            ->expects($this->once())
+            ->method('getRequestType')
+            ->will($this->returnValue(HttpKernelInterface::MASTER_REQUEST))
         ;
 
         $redirectListener->onKernelRequest($eventMock);

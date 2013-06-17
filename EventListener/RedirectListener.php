@@ -61,6 +61,7 @@ class RedirectListener
 
         if ($map->isCountRedirects()) {
             $map->increaseCount();
+
             $em = $this->getEm();
             $em->persist($map);
             $em->flush();

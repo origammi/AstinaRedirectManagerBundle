@@ -1,8 +1,21 @@
 {
     "name": "astina/redirect-manager-bundle",
+    "description": "User gets ability to specify redirection through web GUI.",
+    "keywords": ["astina", "redirection", "redirect", "manager", "302", "301"],
     "type": "symfony-bundle",
     "homepage": "http://astina.ch",
+    "authors": [
+        {
+            "name": "Astina",
+            "homepage": "https://github.com/astina/AstinaRedirectManagerBundle/contributors"
+        }
+    ],
     "license": "MIT",
+    "require": {
+        "symfony/symfony": ">=2.1.0",
+        "doctrine/orm": ">=2.2.3",
+        "doctrine/doctrine-bundle": ">=1.0.0"
+    },
     "autoload": {
         "psr-0": {
 	    "Astina\\Bundle\\RedirectManagerBundle": ""
