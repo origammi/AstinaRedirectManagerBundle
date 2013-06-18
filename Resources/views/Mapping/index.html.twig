@@ -9,6 +9,7 @@
                 <tr>
                     <th>{{ 'list.url.from' | trans }}</th>
                     <th>{{ 'list.url.to' | trans }}</th>
+                    <th>{{ 'list.http_code' | trans }}</th>
                     <th>{{ 'list.count' | trans }}</th>
                     <th>&nbsp;</th>
                 </tr>
@@ -22,7 +23,14 @@
                     <td>
                         <a target="_blank" href="{{ map.urlTo }}">{{ map.urlTo }}</a>
                     </td>
-                    <td>{{ map.count }}</td>
+                    <td>{{ map.redirectHttpCode }}</td>
+                    <td>
+                        {% if map.countRedirects %}
+                            {{ map.count }}
+                        {% else %}
+                            {{ 'list.no_data' | trans }}
+                        {% endif %}
+                    </td>
                     <td>
                         <a href="{{ path('armb_edit_map', {id:map.id}) }}" class="btn btn-info btn"><i class="icon-edit"></i></a>
                         <a href="#deleteRedirect" class="delete btn btn-danger btn" data-toggle="modal" data-deleteurl="{{ path('armb_delete_map', {id:map.id}) }}"><i class="icon-remove"></i></a>

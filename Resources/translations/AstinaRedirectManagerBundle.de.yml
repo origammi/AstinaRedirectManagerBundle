@@ -21,7 +21,9 @@ list:
   url:
     from: "Von URL"
     to:   "Zu URL"
+  http_code: "HTTP-Code"
   count: "Anzahl Weiterleitungen"
+  no_data: "Keine Daten"
   no_redirects:
     title: "Keine Weiterleitungen gefunden!"
     description: "Es sind keine Weiterleitungen erfasst."
