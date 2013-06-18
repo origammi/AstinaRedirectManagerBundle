@@ -2,7 +2,6 @@
 
 namespace Astina\Bundle\RedirectManagerBundle\Command;
 
-use Astina\Bundle\RedirectManagerBundle\Service\CsvImporter;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Console\Command\Command;
@@ -48,10 +47,9 @@ class ImportUrlsCommand extends ContainerAwareCommand
         if (is_readable($file)) {
             $output->writeln(sprintf('<info>Importing file `%s` ...</info>', $file));
 
-            /** @var RegistryInterface $doctrine */
-            $doctrine = $this->getContainer()->get('doctrine');
+            /** @var CsvImporter $doctrine */
+            $csvImporter = $this->getContainer()->get('armb.csv_importer');
 
-            $csvImporter = new CsvImporter($doctrine);
             $count = $csvImporter->import($file);
 
             $output->writeln(sprintf('<info>Successfully imported %d url redirects.</info>', $count));
