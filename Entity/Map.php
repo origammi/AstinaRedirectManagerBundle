@@ -31,6 +31,7 @@ class Map
 
     /**
      * Whether to count redirects or not
+     *
      * @var bool
      */
     private $countRedirects = true;
@@ -136,6 +137,7 @@ class Map
 
     /**
      * @param boolean $countRedirects
+     *
      * @return Map
      */
     public function setCountRedirects($countRedirects)
@@ -155,8 +157,10 @@ class Map
 
     /**
      * @param int $redirectHttpCode
-     * @return Map
+     *
      * @throws \Exception
+     *
+     * @return Map
      */
     public function setRedirectHttpCode($redirectHttpCode)
     {

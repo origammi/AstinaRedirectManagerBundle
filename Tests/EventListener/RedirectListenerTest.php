@@ -3,6 +3,7 @@ namespace Astina\Bundle\RedirectManagerBundle\Tests\EventListener;
 
 use Astina\Bundle\RedirectManagerBundle\EventListener\RedirectListener;
 use Astina\Bundle\RedirectManagerBundle\Entity\Map;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
@@ -22,12 +23,11 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
         $doctrineMock = $this
             ->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
 
         $redirectListener = new RedirectListener($doctrineMock);
 
-        $event = $this->getResponseEventMock('POST');
+        $event = $this->getResponseEventMock($this->getRequestMock('POST'));
 
         $redirectListener->onKernelRequest($event);
 
@@ -42,64 +42,49 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
         $map = new Map();
         $map
             ->setUrlFrom('/something')
-            ->setUrlTo('/somewhere')
-        ;
+            ->setUrlTo('/somewhere');
 
         $repoMock = $this
             ->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')
-            ->getMock()
-        ;
+            ->getMock();
 
         $repoMock
             ->expects($this->once())
             ->method('findOneBy')
-            ->will($this->returnValue($map))
-        ;
+            ->will($this->returnValue($map));
 
         $managerMock = $this
             ->getMockBuilder('\Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
 
         $managerMock
             ->expects($this->once())
             ->method('persist')
-            ->with($map)
-        ;
+            ->with($map);
 
         $doctrineMock = $this
             ->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
 
         $doctrineMock
             ->expects($this->once())
             ->method('getRepository')
-            ->will($this->returnValue($repoMock))
-        ;
+            ->will($this->returnValue($repoMock));
 
         $doctrineMock
             ->expects($this->once())
             ->method('getManager')
-            ->will($this->returnValue($managerMock))
-        ;
+            ->will($this->returnValue($managerMock));
 
         $redirectListener = new RedirectListener($doctrineMock);
 
-        $eventMock = $this->getResponseEventMock('GET');
+        $eventMock = $this->getResponseEventMock();
 
         $eventMock
             ->expects($this->once())
-            ->method('setResponse')
-        ;
-
-        $eventMock
-            ->expects($this->once())
-            ->method('getRequestType')
-            ->will($this->returnValue(HttpKernelInterface::MASTER_REQUEST))
-        ;
+            ->method('setResponse');
 
         $redirectListener->onKernelRequest($eventMock);
 
@@ -107,47 +92,117 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests if baseUrl is removed from requestUri.
      *
-     * @param string $requestMethod
+     * @param string $baseUri
+     * @param string $requestUri
+     * @param string $result
+     *
+     * @dataProvider uriProvider
+     */
+    public function testIfPathIsProperlyCalculated($baseUri, $requestUri, $result)
+    {
+        $repoMock = $this
+            ->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')
+            ->getMock();
+
+        $repoMock
+            ->expects($this->once())
+            ->method('findOneBy')
+            ->with($this->equalTo(array('urlFrom' => $result)))
+            ->will($this->returnValue(null));
+
+        $doctrineMock = $this
+            ->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $doctrineMock
+            ->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($repoMock));
+
+        $redirectListener = new RedirectListener($doctrineMock);
+
+        $redirectListener->onKernelRequest($this->getResponseEventMock($this->getRequestMock('GET', $baseUri, $requestUri)));
+    }
+
+    /**
+     * Provider for testIfPathIsProperlyCalculated.
+     *
+     * @return array
+     */
+    public function uriProvider()
+    {
+        return array(
+            array('',                  '/?a-example-with-get-param=424',       '/?a-example-with-get-param=424'),
+            array('/web/app_dev.php/', '/web/app_dev.php/something/something', '/something/something' ),
+            array('/',                 '/url-path/',                           '/url-path/' )
+        );
+    }
+
+    /**
+     * @param Request $requestMock
      *
      * @return \Symfony\Component\HttpKernel\Event\GetResponseEvent
      */
-    private function getResponseEventMock($requestMethod)
+    private function getResponseEventMock($requestMock = null)
     {
+        if (! $requestMock) {
+            $requestMock = $this->getRequestMock('GET');
+        }
+
         $event = $this
             ->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
 
         $event
             ->expects($this->any())
             ->method('getRequest')
-            ->will($this->returnValue($this->getRequestMock($requestMethod)))
-        ;
+            ->will($this->returnValue($requestMock));
+
+        $event
+            ->expects($this->once())
+            ->method('getRequestType')
+            ->will($this->returnValue(HttpKernelInterface::MASTER_REQUEST));
 
         return $event;
     }
 
     /**
-     *
      * @param string $method
+     * @param string $baseUrl
+     * @param string $requestUri
      *
      * @return \Symfony\Component\HttpFoundation\Request
      */
-    private function getRequestMock($method)
+    private function getRequestMock($method, $baseUrl = null, $requestUri = null)
     {
         $request = $this
             ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
+
 
         $request
             ->expects($this->any())
             ->method('getMethod')
-            ->will($this->returnValue($method))
-        ;
+            ->will($this->returnValue($method));
+
+        if ($baseUrl) {
+            $request
+                ->expects($this->any())
+                ->method('getBaseUrl')
+                ->will($this->returnValue($baseUrl));
+        }
+
+        if ($requestUri) {
+            $request
+                ->expects($this->any())
+                ->method('getRequestUri')
+                ->will($this->returnValue($requestUri));
+        }
 
         return $request;
     }

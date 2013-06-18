@@ -13,7 +13,14 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-
+/**
+ * Class RedirectListener
+ *
+ * @package   Astina\Bundle\RedirectManagerBundle\EventListener
+ * @author    Matej Velikonja <mvelikonja@astina.ch>
+ * @author    Philipp Kräutli <pkraeutli@astina.ch>
+ * @copyright 2013 Astina AG (http://astina.ch)
+ */
 class RedirectListener
 {
     /**
@@ -44,8 +51,10 @@ class RedirectListener
             return;
         }
 
+        $path = str_replace($request->getBaseUrl(), '/', $request->getRequestUri());
+
         /** @var $map Map */
-        $map = $this->getMapRepository()->findOneBy(array('urlFrom' => $request->getPathInfo()));
+        $map = $this->getMapRepository()->findOneBy(array('urlFrom' => $path));
 
         if (null == $map) {
             return;

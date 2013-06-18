@@ -5,20 +5,14 @@
 <head>
     <meta charset="UTF-8" />
     <title>Astina redirect Manager</title>
-    {% block javascripts %}
-
-        <script type="text/javascript" src="{{ asset('bundles/astinaredirectmanager/js/main.js') }}"></script>
-
-    {% endblock %}
+    {% block javascripts %}{% endblock %}
 </head>
 <body>
     <div class="container-fluid">
         <div class="row-fluid">
-            {% for key, message in app.session.flashbag.all %}
-                <div class="alert alert-{{ key }}">
-                    {{ message | trans }}
-                </div>
-            {% endfor %}
+            <div class="page-header">
+                <h1>{{ 'redirects' | trans }}</h1>
+            </div>
 
             {% block armb_content %}
             {% endblock armb_content %}
