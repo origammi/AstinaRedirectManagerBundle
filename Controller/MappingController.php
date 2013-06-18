@@ -54,93 +54,82 @@ class MappingController extends Controller
      */
     public function createAction()
     {
-        $form = $this->createForm(new MapFormType());
+        $map = new Map();
+        $form = $this->createForm(new MapFormType(), $map);
 
         $form->bind($this->getRequest());
 
         if ($form->isValid()) {
-            /** @var $map Map */
-            $map = $form->getData();
             $em  = $this->getEm();
             $em->persist($map);
             $em->flush();
 
-            $this->setFlash('success', 'mapping.flash.map_created.success');
+            $this->addFlash('success', 'mapping.flash.map_created.success');
 
             return $this->redirect($this->generateUrl('armb_homepage'));
         } else {
-            $this->setFlash('error', 'mapping.flash.map_created.error');
+            $this->addFlash('error', 'mapping.flash.map_created.error');
 
             return $this->redirect($this->generateUrl('astina_new_map'));
         }
     }
 
     /**
-     * @param integer $id
+     * @param Map $map
      *
      * @Template()
      *
      * @return array
      */
-    public function editAction($id)
+    public function editAction(Map $map)
     {
-        $form = $this->createForm(new MapFormType());
-        $map = $this->getMapRepository()->find($id);
+        $form = $this->createForm(new MapFormType(), $map);
 
         return array(
-            'form' => $form->setData($map)->createView(),
+            'form' => $form->createView(),
             'map'  => $map
         );
     }
 
     /**
-     * @param integer $id
+     * @param Map $map
      *
      * @return RedirectResponse
      */
-    public function updateAction($id)
+    public function updateAction(Map $map)
     {
-        $map = $this->getMapRepository()->find($id);
-
         $form = $this->createForm(new MapFormType(), $map);
         $form->bind($this->getRequest());
+
         if ($form->isValid()) {
             $em = $this->getEm();
             $em->persist($map);
             $em->flush();
 
-            $this->setFlash('success', 'mapping.flash.map_updated.success');
+            $this->addFlash('success', 'mapping.flash.map_updated.success');
 
             return $this->redirect($this->generateUrl('armb_homepage'));
         } else {
-            $this->setFlash('error', 'mapping.flash.map_updated.error');
+            $this->addFlash('error', 'mapping.flash.map_updated.error');
 
             return $this->redirect($this->generateUrl('astina_edit_map', array('id' => $id)));
         }
     }
 
     /**
-     * @param integer $id
+     * @param Map $map
      *
      * @return RedirectResponse
      */
-    public function deleteAction($id)
+    public function deleteAction(Map $map)
     {
-        $map = $this->getMapRepository()->find($id);
+        $em  = $this->getEm();
+        $em->remove($map);
+        $em->flush();
 
-        if ($map) {
-            $em  = $this->getEm();
-            $em->remove($map);
-            $em->flush();
+        $this->addFlash('success', 'mapping.flash.map_deleted.success');
 
-            $this->setFlash('success', 'mapping.flash.map_deleted.success');
-
-            return $this->redirect($this->generateUrl('armb_homepage'));
-        } else {
-            $this->setFlash('error', 'mapping.flash.map_deleted.error');
-
-            return $this->redirect($this->generateUrl('armb_homepage'));
-        }
+        return $this->redirect($this->generateUrl('armb_homepage'));
     }
 
 
@@ -168,8 +157,8 @@ class MappingController extends Controller
      * @param string $action
      * @param string $value
      */
-    protected function setFlash($action, $value)
+    private function addFlash($action, $value)
     {
-        $this->container->get('session')->setFlash($action, $value);
+        $this->container->get('session')->getFlashBag()->add($action, $value);
     }
 }

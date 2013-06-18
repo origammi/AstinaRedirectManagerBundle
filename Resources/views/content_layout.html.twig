@@ -1,0 +1,18 @@
+{% extends "AstinaRedirectManagerBundle::layout.html.twig" %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('bundles/astinaredirectmanager/js/main.js') }}"></script>
+{% endblock %}
+
+{% block armb_content %}
+    {% for type, flashMessages in app.session.flashbag.all() %}
+        {% for msg in flashMessages %}
+            <div class="alert alert-{{ type }}">
+                {{ msg | trans }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ parent() }}
+{% endblock armb_content %}
