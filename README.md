@@ -1,6 +1,8 @@
 Astina Redirect Manager Bundle
 ==============================
 
+![Build Status](https://travis-ci.org/astina/AstinaRedirectManagerBundle.png?branch=master)](https://travis-ci.org/astina/AstinaRedirectManagerBundle)
+
 ## Install
 
 ### Step 1: Add to composer.json
