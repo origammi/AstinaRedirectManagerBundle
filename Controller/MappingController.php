@@ -11,6 +11,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+/**
+ * Class MappingController
+ *
+ * @package   Astina\Bundle\RedirectManagerBundle\Controller
+ * @author    Matej Velikonja <mvelikonja@astina.ch>
+ * @author    Dražen Perić <dperic@astina.ch>
+ * @copyright 2013 Astina AG (http://astina.ch)
+ */
 class MappingController extends Controller
 {
     /**
@@ -42,7 +50,6 @@ class MappingController extends Controller
     }
 
     /**
-     *
      * @return RedirectResponse
      */
     public function createAction()
@@ -69,9 +76,9 @@ class MappingController extends Controller
     }
 
     /**
-     * @Template()
-     *
      * @param integer $id
+     *
+     * @Template()
      *
      * @return array
      */

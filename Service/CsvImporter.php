@@ -31,7 +31,7 @@ class CsvImporter
     /**
      * Imports urls from file and returns number of items imported.
      *
-     * @param $file
+     * @param string $file
      *
      * @throws CsvImporterException
      *

@@ -36,7 +36,7 @@ class ImportUrlsCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return int

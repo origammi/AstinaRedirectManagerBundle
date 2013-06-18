@@ -44,6 +44,8 @@ class MapTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param int $httpCode
+     *
      * @expectedException \Exception
      * @dataProvider httpCodeProvider
      */
@@ -63,6 +65,7 @@ class MapTest extends \PHPUnit_Framework_TestCase
             array(200),
             array(400),
             array(404),
+            array(md5(time())), //testing random string
         );
     }
 }
