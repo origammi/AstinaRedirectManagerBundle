@@ -68,5 +68,5 @@ Bundle knows how to import csv file of url for redirection.
 CSV has to contain two columns, where the first one contain urlFrom and second urlTo.
 
 ```bash
-$ php app/console armb:import /path/to/csv/file.csv
+$ php app/console armb:import /path/to/csv/file.csv [--redirect=code=302] [--count-redirects]
 ```
