@@ -13,21 +13,8 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  * @author    Matej Velikonja <mvelikonja@astina.ch>
  * @copyright 2013 Astina AG (http://astina.ch)
  */
-class CsvImporter
+class CsvImporter extends BaseService
 {
-    /**
-     * @var RegistryInterface
-     */
-    private $doctrine;
-
-    /**
-     * @param RegistryInterface $doctrine
-     */
-    public function __construct(RegistryInterface $doctrine)
-    {
-        $this->doctrine = $doctrine;
-    }
-
     /**
      * Imports urls from file and returns number of items imported.
      *
@@ -66,15 +53,5 @@ class CsvImporter
         }
 
         return $count;
-    }
-
-    /**
-     * Returns Doctrine's entity manager.
-     *
-     * @return \Doctrine\ORM\EntityManager
-     */
-    private function getEm()
-    {
-        return $this->doctrine->getManager();
     }
 }
