@@ -44,7 +44,7 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($managerMock));
 
         $csvImporter = new CsvImporter($doctrineMock);
-        $result = $csvImporter->import($filePath);
+        $result = $csvImporter->import($filePath, 301, true);
 
         $this->assertEquals($importCount, $result, 'Method returns wrong number of imported items.');
     }
@@ -71,7 +71,7 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
 
         $csvImporter = new CsvImporter($doctrineMock);
 
-        $csvImporter->import($this->getCsvFilePath('bad-data'));
+        $csvImporter->import($this->getCsvFilePath('bad-data'), 301, true);
     }
 
     /**

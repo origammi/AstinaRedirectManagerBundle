@@ -19,12 +19,13 @@ class CsvImporter extends BaseService
      * Imports urls from file and returns number of items imported.
      *
      * @param string $file
+     * @param int    $redirectCode
+     * @param bool   $countRedirects
      *
-     * @throws CsvImporterException
-     *
+     * @throws Exception\CsvImporterException
      * @return int
      */
-    public function import($file)
+    public function import($file, $redirectCode, $countRedirects)
     {
         $count = 0;
         if (($handle = fopen($file, 'r')) !== false) {
@@ -41,7 +42,9 @@ class CsvImporter extends BaseService
                 $map = new Map();
                 $map
                     ->setUrlFrom($urlFrom)
-                    ->setUrlTo($urlTo);
+                    ->setUrlTo($urlTo)
+                    ->setRedirectHttpCode($redirectCode)
+                    ->setCountRedirects($countRedirects);
 
                 $em->persist($map);
 

@@ -31,6 +31,19 @@ class ImportUrlsCommand extends ContainerAwareCommand
                 'file',
                 InputArgument::REQUIRED,
                 'Path of file to import.'
+            )
+            ->addOption(
+                'redirect-code',
+                'c',
+                InputOption::VALUE_OPTIONAL,
+                'Specify the HTTP Status code for imported urls.',
+                302
+            )
+            ->addOption(
+                'count-redirects',
+                null,
+                InputOption::VALUE_NONE,
+                'Should redirects be counted?'
             );
     }
 
@@ -43,6 +56,8 @@ class ImportUrlsCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $file = $input->getArgument('file');
+        $redirectCode   = $input->getOption('redirect-code');
+        $countRedirects = $input->getOption('count-redirects');
 
         if (is_readable($file)) {
             $output->writeln(sprintf('<info>Importing file `%s` ...</info>', $file));
@@ -50,7 +65,7 @@ class ImportUrlsCommand extends ContainerAwareCommand
             /** @var CsvImporter $doctrine */
             $csvImporter = $this->getContainer()->get('armb.csv_importer');
 
-            $count = $csvImporter->import($file);
+            $count = $csvImporter->import($file, $redirectCode, $countRedirects);
 
             $output->writeln(sprintf('<info>Successfully imported %d url redirects.</info>', $count));
 
