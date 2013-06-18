@@ -1,7 +1,6 @@
-Astina Redirect Manager Bundle
-==============================
+# Astina Redirect Manager Bundle
 
-![Build Status](https://travis-ci.org/astina/AstinaRedirectManagerBundle.png?branch=master)](https://travis-ci.org/astina/AstinaRedirectManagerBundle)
+[![Build Status](https://travis-ci.org/astina/AstinaRedirectManagerBundle.png?branch=master)](https://travis-ci.org/astina/AstinaRedirectManagerBundle)
 
 ## Install
 
