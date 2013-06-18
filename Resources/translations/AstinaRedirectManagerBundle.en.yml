@@ -1,3 +1,5 @@
+redirects: Redirects
+
 mapping:
   flash:
     map_created:
@@ -21,7 +23,9 @@ list:
   url:
     from: "From URL"
     to:   "To URL"
+  http_code: "HTTP code"
   count: "Redirect events"
+  no_data: "No data"
   no_redirects:
     title: "No redirects found!"
     description: "There are no redirects in the database. You should create one."

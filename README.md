@@ -59,3 +59,14 @@ framework:
 ``` bash
 $ php app/console doctrine:schema:update --force
 ```
+
+## Usage
+
+### Importing urls with command
+
+Bundle knows how to import csv file of url for redirection.
+CSV has to contain two columns, where the first one contain urlFrom and second urlTo.
+
+```bash
+$ php app/console armb:import /path/to/csv/file.csv
+```

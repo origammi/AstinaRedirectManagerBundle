@@ -1,9 +1,13 @@
 parameters:
     armb.redirect.class: Astina\Bundle\RedirectManagerBundle\EventListener\RedirectListener
+    armb.service.csv_importer: Astina\Bundle\RedirectManagerBundle\Service\CsvImporter
 
 services:
     armb.router:
         class: %armb.redirect.class%
         arguments: [@doctrine]
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 512 }
+    armb.csv_importer:
+        class: %armb.service.csv_importer%
+        arguments: [@doctrine]
