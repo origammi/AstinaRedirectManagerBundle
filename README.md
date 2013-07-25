@@ -1,6 +1,8 @@
 # Astina Redirect Manager Bundle
 
 [![Build Status](https://travis-ci.org/astina/AstinaRedirectManagerBundle.png?branch=master)](https://travis-ci.org/astina/AstinaRedirectManagerBundle)
+[![Latest Stable Version](https://poser.pugx.org/astina/redirect-manager-bundle/v/stable.png)](https://packagist.org/packages/astina/redirect-manager-bundle)
+[![Total Downloads](https://poser.pugx.org/astina/redirect-manager-bundle/downloads.png)](https://packagist.org/packages/astina/redirect-manager-bundle)
 
 ## Install
 
