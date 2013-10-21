@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/astina/AstinaRedirectManagerBundle.png?branch=master)](https://travis-ci.org/astina/AstinaRedirectManagerBundle)
 [![Latest Stable Version](https://poser.pugx.org/astina/redirect-manager-bundle/v/stable.png)](https://packagist.org/packages/astina/redirect-manager-bundle)
 [![Total Downloads](https://poser.pugx.org/astina/redirect-manager-bundle/downloads.png)](https://packagist.org/packages/astina/redirect-manager-bundle)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/d7f07a9b-ba1d-466a-84ec-a09f97dd6a75/mini.png)](https://insight.sensiolabs.com/projects/d7f07a9b-ba1d-466a-84ec-a09f97dd6a75)
 
 ## Install
 
