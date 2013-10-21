@@ -7,11 +7,8 @@ use Astina\Bundle\RedirectManagerBundle\Entity\Map;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class RedirectListener

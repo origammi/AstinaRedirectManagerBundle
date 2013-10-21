@@ -2,8 +2,6 @@
 
 namespace Astina\Bundle\RedirectManagerBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
 /**
  * Astina\Bundle\RedirectManagerBundle\Entity\Map
  */

@@ -4,8 +4,6 @@ namespace Astina\Bundle\RedirectManagerBundle\Service;
 use Astina\Bundle\RedirectManagerBundle\Entity\Map;
 use Astina\Bundle\RedirectManagerBundle\Service\Exception\CsvImporterException;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-
 /**
  * Class CsvImporter
  *
