@@ -3,6 +3,7 @@ namespace Astina\Bundle\RedirectManagerBundle\Tests\EventListener;
 
 use Astina\Bundle\RedirectManagerBundle\EventListener\RedirectListener;
 use Astina\Bundle\RedirectManagerBundle\Entity\Map;
+use Astina\Bundle\RedirectManagerBundle\Service\RedirectFinder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -25,7 +26,9 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $redirectListener = new RedirectListener($doctrineMock);
+        $redirectFinder = new RedirectFinder($doctrineMock);
+
+        $redirectListener = new RedirectListener($redirectFinder);
 
         $event = $this->getResponseEventMock($this->getRequestMock('POST'));
 
@@ -45,12 +48,13 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
             ->setUrlTo('/somewhere');
 
         $repoMock = $this
-            ->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')
+            ->getMockBuilder('Astina\Bundle\RedirectManagerBundle\Entity\MapRepository')
+            ->disableOriginalConstructor()
             ->getMock();
 
         $repoMock
             ->expects($this->once())
-            ->method('findOneBy')
+            ->method('findOneForUrlOrPath')
             ->will($this->returnValue($map));
 
         $managerMock = $this
@@ -78,7 +82,9 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getManager')
             ->will($this->returnValue($managerMock));
 
-        $redirectListener = new RedirectListener($doctrineMock);
+        $redirectFinder = new RedirectFinder($doctrineMock);
+
+        $redirectListener = new RedirectListener($redirectFinder);
 
         $eventMock = $this->getResponseEventMock();
 
@@ -103,13 +109,14 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
     public function testIfPathIsProperlyCalculated($baseUri, $requestUri, $result)
     {
         $repoMock = $this
-            ->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')
+            ->getMockBuilder('Astina\Bundle\RedirectManagerBundle\Entity\MapRepository')
+            ->disableOriginalConstructor()
             ->getMock();
 
         $repoMock
             ->expects($this->once())
-            ->method('findOneBy')
-            ->with($this->equalTo(array('urlFrom' => $result)))
+            ->method('findOneForUrlOrPath')
+            ->with($this->anything(), $this->equalTo($result))
             ->will($this->returnValue(null));
 
         $doctrineMock = $this
@@ -122,7 +129,9 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getRepository')
             ->will($this->returnValue($repoMock));
 
-        $redirectListener = new RedirectListener($doctrineMock);
+        $redirectFinder = new RedirectFinder($doctrineMock);
+
+        $redirectListener = new RedirectListener($redirectFinder);
 
         $redirectListener->onKernelRequest($this->getResponseEventMock($this->getRequestMock('GET', $baseUri, $requestUri)));
     }

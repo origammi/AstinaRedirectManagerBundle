@@ -25,29 +25,17 @@ class RedirectFinder implements RedirectFinderInterface
 
     public function findRedirect(Request $request)
     {
-        $path = str_replace($request->getBaseUrl(), '', $request->getRequestUri());
+        $path = str_replace($request->getBaseUrl(), '/', $request->getRequestUri());
         $url = $request->getSchemeAndHttpHost() . $request->getRequestUri();
 
         /** @var MapRepository $repo */
         $repo = $this->doctrine->getRepository('AstinaRedirectManagerBundle:Map');
-        /** @var Map[] $maps */
-        $maps = $repo->createQueryBuilder('m')
-            ->where('m.urlFrom = :path')
-            ->orWhere('m.urlFrom = :url')
-            ->setParameter('path', $path)
-            ->setParameter('url', $url)
-            ->orderBy('m.urlFrom', 'desc') // urls starting with "http" will be sorted before urls starting with "/"
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getResult()
-        ;
+        $map = $repo->findOneForUrlOrPath($url, $path);
 
-        if (empty($maps)) {
+        if (null === $map) {
             return null;
         }
 
-        /** @var Map $map */
-        $map = current($maps);
         $redirectUrl = $map->getUrlTo();
         if (!$this->isAbsoluteUrl($redirectUrl) && $baseUrl = $request->getBaseUrl()) {
             $redirectUrl = $baseUrl . $redirectUrl;
