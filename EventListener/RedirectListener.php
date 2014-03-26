@@ -2,12 +2,8 @@
 
 namespace Astina\Bundle\RedirectManagerBundle\EventListener;
 
-use Astina\Bundle\RedirectManagerBundle\Entity\MapRepository;
-use Astina\Bundle\RedirectManagerBundle\Entity\Map;
-
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Astina\Bundle\RedirectManagerBundle\Service\RedirectFinderInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 /**
@@ -21,16 +17,13 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 class RedirectListener
 {
     /**
-     * @var RegistryInterface
+     * @var RedirectFinderInterface
      */
-    private $doctrine;
+    private $redirectFinder;
 
-    /**
-     * @param RegistryInterface $doctrine
-     */
-    public function __construct(RegistryInterface $doctrine)
+    function __construct(RedirectFinderInterface $redirectFinder)
     {
-        $this->doctrine = $doctrine;
+        $this->redirectFinder = $redirectFinder;
     }
 
     /**
@@ -48,49 +41,12 @@ class RedirectListener
             return;
         }
 
-        $path = str_replace($request->getBaseUrl(), '/', $request->getRequestUri());
+        $response = $this->redirectFinder->findRedirect($request);
 
-        /** @var $map Map */
-        $map = $this->getMapRepository()->findOneBy(array('urlFrom' => $path));
-
-        if (null == $map) {
+        if (null == $response) {
             return;
         }
 
-        $url = $map->getUrlTo();
-        if ($baseUrl = $request->getBaseUrl()) {
-            $url = $baseUrl . $url;
-        }
-
-        $response = new RedirectResponse($url, $map->getRedirectHttpCode());
         $event->setResponse($response);
-
-        if ($map->isCountRedirects()) {
-            $map->increaseCount();
-
-            $em = $this->getEm();
-            $em->persist($map);
-            $em->flush();
-        }
-    }
-
-    /**
-     * Get repository for Map entity.
-     *
-     * @return MapRepository
-     */
-    private function getMapRepository()
-    {
-        return $this->doctrine->getRepository('AstinaRedirectManagerBundle:Map');
-    }
-
-    /**
-     * Returns Doctrine's entity manager.
-     *
-     * @return \Doctrine\ORM\EntityManager
-     */
-    private function getEm()
-    {
-        return $this->doctrine->getManager();
     }
 }
