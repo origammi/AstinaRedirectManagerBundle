@@ -37,7 +37,7 @@ class RedirectFinder implements RedirectFinderInterface
             ->setParameter('path', $path)
             ->setParameter('url', $url)
             ->orderBy('m.urlFrom', 'desc') // urls starting with "http" will be sorted before urls starting with "/"
-            ->setMaxResults(2)
+            ->setMaxResults(1)
             ->getQuery()
             ->getResult()
         ;
