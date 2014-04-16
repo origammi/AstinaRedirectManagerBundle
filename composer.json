@@ -12,7 +12,7 @@
     ],
     "license": "MIT",
     "require": {
-        "symfony/symfony": ">=2.1.0",
+        "symfony/symfony": ">=2.2.0",
         "doctrine/orm": ">=2.2.3",
         "doctrine/doctrine-bundle": ">=1.0.0"
     },
