@@ -5,14 +5,18 @@ namespace Astina\Bundle\RedirectManagerBundle\Entity;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * MapRepository
+ * Class MapRepository
  *
+ * @package   Astina\Bundle\RedirectManagerBundle\Entity
+ * @author    Philipp Kräutli <pkraeutli@astina.ch>
+ * @copyright 2014 Astina AG (http://astina.ch)
  */
 class MapRepository extends EntityRepository
 {
     /**
-     * @param $url
-     * @param $path
+     * @param string $url
+     * @param string $path
+     *
      * @return Map
      */
     public function findOneForUrlOrPath($url, $path)
@@ -25,8 +29,7 @@ class MapRepository extends EntityRepository
             ->orderBy('m.urlFrom', 'desc') // urls starting with "http" will be sorted before urls starting with "/"
             ->setMaxResults(1)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
 
         if (empty($maps)) {
             return null;

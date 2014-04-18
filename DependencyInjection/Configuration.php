@@ -18,11 +18,27 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('astina_redirect_manager');
+        $rootNode    = $treeBuilder->root('astina_redirect_manager');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+            ->arrayNode('redirect_subdomains')
+                ->children()
+                    ->scalarNode('route_name')
+                        ->isRequired()
+                    ->end()
+                    ->arrayNode('route_params')
+                        ->useAttributeAsKey('name')
+                        ->prototype('scalar')->end()
+                    ->end()
+                    ->integerNode('redirect_code')
+                        ->defaultValue(301)
+                        ->min(300)
+                        ->max(308)
+                    ->end()
+                ->end()
+            ->end();
+
 
         return $treeBuilder;
     }

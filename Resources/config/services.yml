@@ -1,5 +1,6 @@
 parameters:
     armb.redirect.class: Astina\Bundle\RedirectManagerBundle\EventListener\RedirectListener
+    armb.subdomain.class: Astina\Bundle\RedirectManagerBundle\EventListener\SubDomainListener
     armb.service.csv_importer: Astina\Bundle\RedirectManagerBundle\Service\CsvImporter
     armb.redirect_finder.class: Astina\Bundle\RedirectManagerBundle\Service\RedirectFinder
 
@@ -9,6 +10,9 @@ services:
         arguments: [@armb.redirect_finder]
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 512 }
+    armb.subdomain:
+        class: %armb.subdomain.class%
+        arguments: [@router, %router.request_context.host% ]
     armb.csv_importer:
         class: %armb.service.csv_importer%
         arguments: [@doctrine]

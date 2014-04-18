@@ -21,7 +21,10 @@ class RedirectListener
      */
     private $redirectFinder;
 
-    function __construct(RedirectFinderInterface $redirectFinder)
+    /**
+     * @param RedirectFinderInterface $redirectFinder
+     */
+    public function __construct(RedirectFinderInterface $redirectFinder)
     {
         $this->redirectFinder = $redirectFinder;
     }

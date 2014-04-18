@@ -74,3 +74,32 @@ CSV has to contain two columns, where the first one contain urlFrom and second u
 ```bash
 $ php app/console armb:import /path/to/csv/file.csv [--redirect-code=302] [--count-redirects]
 ```
+
+### Using subDomain listener to redirect to somewhere else
+
+If listener detects that subDomain is used it redirects visitor to url with name `route_name` with `route_params` and redirect code `redirect_code`.
+
+```yaml
+# app/config/config.yml
+
+astina_redirect_manager:
+    redirect_subdomains:
+        route_name:           ~ # Required
+        route_params:
+            param1: some-value
+            param2: some-different-value
+        redirect_code:        301
+
+```
+
+*Warning*
+
+You have to set parameter `router.request_context.host` in parameters.yml file. Otherwise value `localhost` will be used as domain name.
+
+```yaml
+# app/config/parameters.yml
+
+# ...
+router.request_context.host: example.com
+# ...
+```
