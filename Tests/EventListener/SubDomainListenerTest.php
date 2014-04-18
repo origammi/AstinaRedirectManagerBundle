@@ -157,4 +157,66 @@ class SubDomainListenerTest extends \PHPUnit_Framework_TestCase
 
         $listener->onKernelRequest($event);
     }
+
+    /**
+     * @param string $method
+     *
+     * @dataProvider methodProvider
+     */
+    public function testIfListenerSkipsNonGetRequests($method)
+    {
+        $request = $this->getMockBuilder('Symfony\Component\HttpFoundation\Request')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // test with given method
+        $request
+            ->expects($this->once())
+            ->method('getMethod')
+            ->will($this->returnValue($method));
+
+        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // works only for master requests
+        $event
+            ->expects($this->once())
+            ->method('getRequestType')
+            ->will($this->returnValue(HttpKernelInterface::MASTER_REQUEST));
+
+        $event
+            ->expects($this->once())
+            ->method('getRequest')
+            ->will($this->returnValue($request));
+
+        // listener should never call setResponse
+        $event
+            ->expects($this->never())
+            ->method('setResponse');
+
+        $router = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Routing\Router')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $listener = new SubDomainListener($router, '', '', array());
+
+        $listener->onKernelRequest($event);
+    }
+
+    /**
+     * @return array
+     */
+    public function methodProvider()
+    {
+        return array(
+            array('HEAD'),
+            array('POST'),
+            array('PUT'),
+            array('DELETE'),
+            array('CONNECT'),
+            array('OPTIONS'),
+            array('TRACE'),
+        );
+    }
 }
