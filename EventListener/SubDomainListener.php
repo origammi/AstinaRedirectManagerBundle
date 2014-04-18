@@ -7,7 +7,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use JMS\DiExtraBundle\Annotation as DI;
-use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Class SubDomainListener
@@ -26,6 +25,11 @@ class SubDomainListener
     /**
      * @var string
      */
+    private $domain;
+
+    /**
+     * @var string
+     */
     private $pathName;
 
     /**
@@ -40,13 +44,15 @@ class SubDomainListener
 
     /**
      * @param Router $router
+     * @param string $domain
      * @param string $pathName
      * @param array  $pathParams
      * @param int    $redirectCode
      */
-    public function __construct(Router $router, $pathName, array $pathParams, $redirectCode = 301)
+    public function __construct(Router $router, $domain, $pathName, array $pathParams, $redirectCode = 301)
     {
         $this->router       = $router;
+        $this->domain       = $domain;
         $this->pathName     = $pathName;
         $this->pathParams   = $pathParams;
         $this->redirectCode = $redirectCode;
@@ -63,22 +69,41 @@ class SubDomainListener
             return;
         }
 
-        $request    = $event->getRequest();
-        $host       = $request->getHttpHost();
-        $parts      = explode('.', $host);
-        $subDomains = array_slice($parts, 0, count($parts) - 2);
+        $request = $event->getRequest();
 
         if ($request->getMethod() != 'GET') {
             return;
         }
 
-        if (! count($subDomains)) {
+        $host      = $request->getHttpHost();
+        $subDomain = $this->getSubDomain($host);
+
+        if (! $subDomain) {
             return;
         }
 
         $redirectResponse = new RedirectResponse($this->getRedirectUrl(), $this->redirectCode);
 
         $event->setResponse($redirectResponse);
+    }
+
+    /**
+     * Returns subDomain of host.
+     *
+     * @param string $host
+     *
+     * @return string | null
+     */
+    private function getSubDomain($host)
+    {
+        $subDomain = str_ireplace($this->domain, '', $host);
+        $subDomain = trim($subDomain, '.');
+
+        if (! strlen($subDomain)) {
+            return null;
+        }
+
+        return $subDomain;
     }
 
     /**

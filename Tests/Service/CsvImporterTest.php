@@ -50,7 +50,7 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Astina\Bundle\RedirectManagerBundle\Service\Exception\CsvImporterException
+     * @expectedException \Astina\Bundle\RedirectManagerBundle\Service\Exception\CsvImporterException
      */
     public function testIfExceptionIsRaisedWhenBadInputFileIsProvided()
     {
