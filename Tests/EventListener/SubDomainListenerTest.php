@@ -219,4 +219,33 @@ class SubDomainListenerTest extends \PHPUnit_Framework_TestCase
             array('TRACE'),
         );
     }
+
+    /**
+     * Tests if listener skips sub requests.
+     */
+    public function testIfListenerSkipsSubRequests()
+    {
+        $event = $this->getMockBuilder('Symfony\Component\HttpKernel\Event\GetResponseEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // works only for master requests
+        $event
+            ->expects($this->once())
+            ->method('getRequestType')
+            ->will($this->returnValue(HttpKernelInterface::SUB_REQUEST));
+
+        // listener should never call setResponse
+        $event
+            ->expects($this->never())
+            ->method('setResponse');
+
+        $router = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Routing\Router')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $listener = new SubDomainListener($router, '', '', array());
+
+        $listener->onKernelRequest($event);
+    }
 }
