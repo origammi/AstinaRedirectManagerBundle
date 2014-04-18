@@ -10,6 +10,7 @@ use Astina\Bundle\RedirectManagerBundle\Form\Type\MapFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class MappingController
@@ -50,14 +51,16 @@ class MappingController extends Controller
     }
 
     /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return RedirectResponse
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $map = new Map();
         $form = $this->createForm(new MapFormType(), $map);
 
-        $form->bind($this->getRequest());
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em  = $this->getEm();
@@ -92,14 +95,15 @@ class MappingController extends Controller
     }
 
     /**
-     * @param Map $map
+     * @param Map     $map
+     * @param Request $request
      *
      * @return RedirectResponse
      */
-    public function updateAction(Map $map)
+    public function updateAction(Map $map, Request $request)
     {
         $form = $this->createForm(new MapFormType(), $map);
-        $form->bind($this->getRequest());
+        $form->submit($request);
 
         if ($form->isValid()) {
             $em = $this->getEm();
@@ -112,7 +116,7 @@ class MappingController extends Controller
         } else {
             $this->addFlash('error', 'mapping.flash.map_updated.error');
 
-            return $this->redirect($this->generateUrl('astina_edit_map', array('id' => $id)));
+            return $this->redirect($this->generateUrl('astina_edit_map', array('id' => $map->getId())));
         }
     }
 
