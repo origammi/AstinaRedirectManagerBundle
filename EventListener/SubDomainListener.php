@@ -6,7 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use JMS\DiExtraBundle\Annotation as DI;
 
 /**
  * Class SubDomainListener
