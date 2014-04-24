@@ -3,6 +3,7 @@
 namespace Astina\Bundle\RedirectManagerBundle\Tests\EventListener;
 
 use Astina\Bundle\RedirectManagerBundle\EventListener\SubDomainListener;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
@@ -22,6 +23,7 @@ class SubDomainListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIfListenerSetsRedirectIfDetectsSubDomain($httpHost, $domain)
     {
+        $that        = $this;
         $pathName    = 'home';
         $pathParams  = array('_locale' => 'en');
         $redirectUrl = 'http://redirect-to-here.com';
@@ -60,7 +62,13 @@ class SubDomainListenerTest extends \PHPUnit_Framework_TestCase
         $event
             ->expects($this->once())
             ->method('setResponse')
-            ->with($this->isInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse'));
+            ->with($this->callback(function (RedirectResponse $event) use ($that, $redirectUrl) {
+                // testing if RedirectResponse was constructed with proper arguments.
+                $that->assertEquals($redirectUrl, $event->getTargetUrl());
+                $that->assertEquals(301, $event->getStatusCode());
+
+                return true;
+            }));
 
         $router = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Routing\Router')
             ->disableOriginalConstructor()
