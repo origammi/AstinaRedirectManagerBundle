@@ -20,6 +20,8 @@ class SubDomainListenerTest extends \PHPUnit_Framework_TestCase
      * @param string $domain
      *
      * @dataProvider getHttpHostsWithSubDomain
+     *
+     * @return void
      */
     public function testIfListenerSetsRedirectIfDetectsSubDomain($httpHost, $domain)
     {
