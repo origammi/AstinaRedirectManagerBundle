@@ -163,6 +163,7 @@ class MappingController extends Controller
      */
     private function addFlash($action, $value)
     {
+        $value = $this->get('translator')->trans($value, array(), 'AstinaRedirectManagerBundle');
         $this->container->get('session')->getFlashBag()->add($action, $value);
     }
 }
