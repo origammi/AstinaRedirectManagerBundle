@@ -2,7 +2,7 @@
 {% trans_default_domain "AstinaRedirectManagerBundle" %}
 
 {% block armb_content  %}
-    <form action="{{ path('armb_create_map') }}" method="post" {{ form_enctype(form) }}>
+    <form action="{{ path('armb_new_map') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
 
         <input class = "btn btn-primary" type="submit" value= "{{ "form.submit" | trans }}" />

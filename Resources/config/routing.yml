@@ -6,12 +6,6 @@ armb_new_map:
     pattern:  /new
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:new }
 
-armb_create_map:
-    pattern:  /create
-    defaults: { _controller: AstinaRedirectManagerBundle:Mapping:create }
-    requirements:
-        _method:  POST
-
 armb_edit_map:
     pattern:  /{id}/edit
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:edit }

@@ -41,9 +41,13 @@ class MappingController extends Controller
      *
      * @return array
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
         $form = $this->createForm(new MapFormType());
+
+        if ($request->getMethod() === 'POST') {
+            return $this->createAction($request);
+        }
 
         return array(
             'form' => $form->createView()
@@ -55,7 +59,7 @@ class MappingController extends Controller
      *
      * @return RedirectResponse
      */
-    public function createAction(Request $request)
+    private function createAction(Request $request)
     {
         $map = new Map();
         $form = $this->createForm(new MapFormType(), $map);
@@ -70,11 +74,11 @@ class MappingController extends Controller
             $this->addFlash('success', 'mapping.flash.map_created.success');
 
             return $this->redirect($this->generateUrl('armb_homepage'));
-        } else {
-            $this->addFlash('error', 'mapping.flash.map_created.error');
-
-            return $this->redirect($this->generateUrl('astina_new_map'));
         }
+
+        return array(
+            'form' => $form->createView()
+        );
     }
 
     /**

@@ -1,0 +1,4 @@
+Astina\Bundle\RedirectManagerBundle\Entity\Map:
+    constraints:
+        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+            fields: [ urlFrom ]
