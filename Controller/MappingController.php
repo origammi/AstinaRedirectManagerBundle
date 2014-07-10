@@ -37,9 +37,11 @@ class MappingController extends Controller
     }
 
     /**
-     * @Template()
+     * @param Request $request
      *
-     * @return array
+     *  @Template()
+     *
+     * @return array|RedirectResponse
      */
     public function newAction(Request $request)
     {
