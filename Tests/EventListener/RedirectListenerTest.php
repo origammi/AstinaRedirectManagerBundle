@@ -3,7 +3,7 @@ namespace Astina\Bundle\RedirectManagerBundle\Tests\EventListener;
 
 use Astina\Bundle\RedirectManagerBundle\EventListener\RedirectListener;
 use Astina\Bundle\RedirectManagerBundle\Entity\Map;
-use Astina\Bundle\RedirectManagerBundle\Service\RedirectFinder;
+use Astina\Bundle\RedirectManagerBundle\Redirect\RedirectFinder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -54,8 +54,8 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
 
         $repoMock
             ->expects($this->once())
-            ->method('findOneForUrlOrPath')
-            ->will($this->returnValue($map));
+            ->method('findForUrlOrPath')
+            ->will($this->returnValue(array($map)));
 
         $managerMock = $this
             ->getMockBuilder('\Doctrine\ORM\EntityManager')
@@ -115,7 +115,7 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
 
         $repoMock
             ->expects($this->once())
-            ->method('findOneForUrlOrPath')
+            ->method('findForUrlOrPath')
             ->with($this->anything(), $this->equalTo($result))
             ->will($this->returnValue(null));
 

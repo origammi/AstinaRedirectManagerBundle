@@ -2,7 +2,7 @@ parameters:
     armb.redirect.class: Astina\Bundle\RedirectManagerBundle\EventListener\RedirectListener
     armb.subdomain.class: Astina\Bundle\RedirectManagerBundle\EventListener\SubDomainListener
     armb.service.csv_importer: Astina\Bundle\RedirectManagerBundle\Service\CsvImporter
-    armb.redirect_finder.class: Astina\Bundle\RedirectManagerBundle\Service\RedirectFinder
+    armb.redirect_finder.class: Astina\Bundle\RedirectManagerBundle\Redirect\RedirectFinder
 
 services:
     armb.router:

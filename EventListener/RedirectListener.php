@@ -2,7 +2,7 @@
 
 namespace Astina\Bundle\RedirectManagerBundle\EventListener;
 
-use Astina\Bundle\RedirectManagerBundle\Service\RedirectFinderInterface;
+use Astina\Bundle\RedirectManagerBundle\Redirect\RedirectFinderInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 

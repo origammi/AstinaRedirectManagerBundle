@@ -21,5 +21,8 @@
 	    "Astina\\Bundle\\RedirectManagerBundle": ""
         }
     },
+    "require-dev": {
+        "phpunit/phpunit": "~4.3"
+    },
     "target-dir": "Astina/Bundle/RedirectManagerBundle"
 }

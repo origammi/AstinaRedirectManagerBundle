@@ -13,6 +13,11 @@ class Map
     private $id;
 
     /**
+     * @var string
+     */
+    private $hostPattern;
+
+    /**
      * @var string $urlFrom
      */
     private $urlFrom;
@@ -47,6 +52,22 @@ class Map
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param string $hostPattern
+     */
+    public function setHostPattern($hostPattern)
+    {
+        $this->hostPattern = $hostPattern;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHostPattern()
+    {
+        return $this->hostPattern;
     }
 
     /**

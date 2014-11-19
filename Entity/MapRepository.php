@@ -17,9 +17,9 @@ class MapRepository extends EntityRepository
      * @param string $url
      * @param string $path
      *
-     * @return Map
+     * @return Map[]
      */
-    public function findOneForUrlOrPath($url, $path)
+    public function findForUrlOrPath($url, $path)
     {
         $maps = $this->createQueryBuilder('m')
             ->where('m.urlFrom = :path')
@@ -27,9 +27,21 @@ class MapRepository extends EntityRepository
             ->setParameter('path', $path)
             ->setParameter('url', $url)
             ->orderBy('m.urlFrom', 'desc') // urls starting with "http" will be sorted before urls starting with "/"
-            ->setMaxResults(1)
             ->getQuery()
             ->getResult();
+
+        return $maps;
+    }
+
+    /**
+     * @param string $url
+     * @param string $path
+     *
+     * @return Map
+     */
+    public function findOneForUrlOrPath($url, $path)
+    {
+        $maps = $this->findForUrlOrPath($url, $path);
 
         if (empty($maps)) {
             return null;
