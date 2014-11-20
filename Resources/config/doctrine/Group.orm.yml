@@ -1,0 +1,17 @@
+Astina\Bundle\RedirectManagerBundle\Entity\Group:
+    type: entity
+    table: armb_redirect_group
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        name:
+            type: string
+            length: 255
+            nullable: false
+        priority:
+            type: integer
+            nullable: false
+

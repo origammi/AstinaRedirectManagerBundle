@@ -21,8 +21,10 @@ class MapFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('group', 'entity', array('required' => false, 'property' => 'name', 'class' => 'AstinaRedirectManagerBundle:Group'))
             ->add('urlFrom', 'text', array('label' => 'form.urlFrom', 'translation_domain' => 'AstinaRedirectManagerBundle'))
-            ->add('urlTo', 'text', array('label' => 'form.urlTo', 'translation_domain' => 'AstinaRedirectManagerBundle'));
+            ->add('urlTo', 'text', array('label' => 'form.urlTo', 'translation_domain' => 'AstinaRedirectManagerBundle'))
+        ;
     }
 
     /**

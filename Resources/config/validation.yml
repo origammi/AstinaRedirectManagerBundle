@@ -1,4 +1,17 @@
 Astina\Bundle\RedirectManagerBundle\Entity\Map:
+    properties:
+        urlFrom:
+            - NotBlank: ~
+        urlTo:
+            - NotBlank: ~
+
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
             fields: [ urlFrom ]
+
+Astina\Bundle\RedirectManagerBundle\Entity\Group:
+    properties:
+        name:
+            - NotBlank: ~
+        priority:
+            - NotBlank: ~

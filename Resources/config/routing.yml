@@ -21,3 +21,17 @@ armb_delete_map:
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:delete }
     requirements:
         _method:  POST
+
+armg_group_new:
+    pattern: /group/new
+    defaults: { _controller: AstinaRedirectManagerBundle:Group:form }
+
+armg_group_edit:
+    pattern: /group/{id}/edit
+    defaults: { _controller: AstinaRedirectManagerBundle:Group:form }
+
+armg_group_delete:
+    pattern: /group/{id}/delete
+    defaults: { _controller: AstinaRedirectManagerBundle:Group:delete }
+    requirements:
+        _method:  POST
