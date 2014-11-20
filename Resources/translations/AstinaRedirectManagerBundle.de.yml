@@ -38,6 +38,7 @@ form:
   abort: "Abbrechen"
   name: "Name"
   priority: "Priorität"
+  toggle_advanced_fields: Erweiterte Einstellungen ein-/ausblenden
 
 list:
   new: "Neue Weiterleitung"

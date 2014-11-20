@@ -21,6 +21,12 @@ class MapFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $map = isset($options['data']) ? $options['data'] : null;
+        $hideAdvancedSettings = true;
+        if ($map && $map->hasAdvancedSettings()) {
+            $hideAdvancedSettings = false;
+        }
+
         $builder
             ->add('urlFrom', 'text', array(
                 'label' => 'form.urlFrom',
@@ -30,6 +36,7 @@ class MapFormType extends AbstractType
                 'label' => 'form.urlFromIsRegexPattern',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
+                'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
             ->add('urlTo', 'text', array(
                 'label' => 'form.urlTo',
@@ -46,16 +53,19 @@ class MapFormType extends AbstractType
                 'label' => 'form.host',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
+                'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
             ->add('hostIsRegexPattern', 'checkbox', array(
                 'label' => 'form.hostIsRegexPattern',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
+                'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
             ->add('hostRegexPatternNegate', 'checkbox', array(
                 'label' => 'form.hostRegexPatternNegate',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
+                'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
             ->add('redirectHttpCode', 'choice', array(
                 'label' => 'form.redirectHttpCode',
@@ -65,6 +75,7 @@ class MapFormType extends AbstractType
                     302 => '302 Found',
                     303 => '303 See Other',
                 ),
+                'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
             ->add('countRedirects', 'checkbox', array(
                 'label' => 'form.countRedirects',
@@ -75,6 +86,7 @@ class MapFormType extends AbstractType
                 'label' => 'form.comment',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
+                'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
         ;
     }

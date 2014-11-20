@@ -38,6 +38,7 @@ form:
   abort: "Abort"
   name: "Name"
   priority: "Priority"
+  toggle_advanced_fields: Toggle advanced settings
 
 list:
   new: "New Redirect"

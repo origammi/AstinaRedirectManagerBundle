@@ -2,7 +2,7 @@
 {% trans_default_domain "AstinaRedirectManagerBundle" %}
 
 {% block armb_content  %}
-    {% if maps | length > 0 or search %}
+    {% if grouped_maps | length > 0 or search %}
         <div class="btn-group pull-right">
             <a href="{{ path('armb_new_map') }}" class="btn btn-primary"><span class="icon-plus icon-white"></span> {{ 'list.new' | trans }}</a>
             <a href="{{ path('armg_group_new') }}" class="btn"><span class="icon-plus"></span> {{ 'list.new_group' | trans }}</a>
@@ -28,56 +28,56 @@
                 </tr>
             </thead>
             <tbody>
-                {% set current_group = null %}
-                {% for map in maps %}
-                    {% if map.group and current_group != map.group %}
+                {% for group_maps in grouped_maps %}
+                    {% if group_maps.group is defined %}
                         <tr>
                             <td colspan="6">
                                 <h3>
-                                    {{ map.group.name }}
-                                    <a href="{{ path('armg_group_edit', {'id': map.group.id}) }}" class="btn btn-link"><i class="icon-pencil"></i></a>
+                                    {{ group_maps.group.name }}
+                                    <a href="{{ path('armg_group_edit', {'id': group_maps.group.id}) }}" class="btn btn-link"><i class="icon-pencil"></i></a>
                                 </h3>
                             </td>
                         </tr>
-                        {% set current_group = map.group %}
                     {% endif %}
-                    <tr>
-                        <td>
-                            {% if map.urlFromIsRegexPattern %}
-                                {{ map.urlFrom }}
-                            {% else %}
-                                <a target="_blank" href="{{ map.urlFrom }}">{{ map.urlFrom }}</a>
-                            {% endif %}
-                            {% if map.comment|trim %}
-                                <p class="muted">{{ map.comment|nl2br }}</p>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if map.urlToContainsPlaceholders %}
-                                {{ map.urlTo }}
-                            {% else %}
-                                <a target="_blank" href="{{ map.urlTo }}">{{ map.urlTo }}</a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if map.hostRegexPatternNegate %}
-                                <span class="muted">({{ 'list.host_regex_pattern_negate' | trans }})</span>
-                            {% endif %}
-                            {{ map.host }}
-                        </td>
-                        <td>{{ map.redirectHttpCode }}</td>
-                        <td>
-                            {% if map.countRedirects %}
-                                {{ map.count }}
-                            {% else %}
-                                <span class="muted">{{ 'list.no_data' | trans }}</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a href="{{ path('armb_edit_map', {id:map.id}) }}" class="btn btn-info btn"><i class="icon-pencil"></i></a>
-                            <a href="#deleteRedirect" class="delete btn btn-danger btn" data-toggle="modal" data-deleteurl="{{ path('armb_delete_map', {id:map.id}) }}"><i class="icon-trash icon-white"></i></a>
-                        </td>
-                    </tr>
+                    {% for map in group_maps.maps %}
+                        <tr>
+                            <td>
+                                {% if map.urlFromIsRegexPattern %}
+                                    {{ map.urlFrom }}
+                                {% else %}
+                                    <a target="_blank" href="{{ map.urlFrom }}">{{ map.urlFrom }}</a>
+                                {% endif %}
+                                {% if map.comment|trim %}
+                                    <p class="muted">{{ map.comment|nl2br }}</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if map.urlToContainsPlaceholders %}
+                                    {{ map.urlTo }}
+                                {% else %}
+                                    <a target="_blank" href="{{ map.urlTo }}">{{ map.urlTo }}</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if map.hostRegexPatternNegate %}
+                                    <span class="muted">({{ 'list.host_regex_pattern_negate' | trans }})</span>
+                                {% endif %}
+                                {{ map.host }}
+                            </td>
+                            <td>{{ map.redirectHttpCode }}</td>
+                            <td>
+                                {% if map.countRedirects %}
+                                    {{ map.count }}
+                                {% else %}
+                                    <span class="muted">{{ 'list.no_data' | trans }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('armb_edit_map', {id:map.id}) }}" class="btn btn-info btn"><i class="icon-pencil"></i></a>
+                                <a href="#deleteRedirect" class="delete btn btn-danger btn" data-toggle="modal" data-deleteurl="{{ path('armb_delete_map', {id:map.id}) }}"><i class="icon-trash icon-white"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 {% endfor %}
             </tbody>
         </table>

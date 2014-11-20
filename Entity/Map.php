@@ -69,6 +69,16 @@ class Map
      */
     private $comment;
 
+    public function hasAdvancedSettings()
+    {
+        return $this->urlFromIsRegexPattern
+            || $this->hostIsRegexPattern
+            || $this->hostRegexPatternNegate
+            || $this->redirectHttpCode != 302
+            || $this->comment
+        ;
+    }
+
     /**
      * Get id
      *

@@ -4,6 +4,7 @@ namespace Astina\Bundle\RedirectManagerBundle\Controller;
 
 use Astina\Bundle\RedirectManagerBundle\Entity\MapRepository;
 use Astina\Bundle\RedirectManagerBundle\Entity\Map;
+use FOS\UserBundle\Entity\Group;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Astina\Bundle\RedirectManagerBundle\Form\Type\MapFormType;
 
@@ -34,8 +35,10 @@ class MappingController extends Controller
 
         $maps = $this->getMapRepository()->search($search);
 
+        $groupedMaps = $this->groupMaps($maps);
+
         return array(
-            'maps' => $maps,
+            'grouped_maps' => $groupedMaps,
             'search' => $search,
         );
     }
@@ -174,5 +177,32 @@ class MappingController extends Controller
     {
         $value = $this->get('translator')->trans($value, array(), 'AstinaRedirectManagerBundle');
         $this->container->get('session')->getFlashBag()->add($action, $value);
+    }
+
+    /**
+     * @param Map[] $maps
+     * @return array
+     */
+    private function groupMaps($maps)
+    {
+        /** @var Group[] $groups */
+        $groups = $this->getDoctrine()->getRepository('AstinaRedirectManagerBundle:Group')->findBy(array(), array('priority' => 'asc'));
+
+        $groupedMaps = array();
+        foreach ($maps as $map) {
+            if (null === $map->getGroup()) {
+                $groupedMaps['__none__']['maps'][] = $map;
+            }
+        }
+        foreach ($groups as $group) {
+            $groupedMaps[$group->getId()] = array('group' => $group, 'maps' => array());
+            foreach ($maps as $map) {
+                if ($map->getGroup() && $map->getGroup()->getId() === $group->getId()) {
+                    $groupedMaps[$group->getId()]['maps'][] = $map;
+                }
+            }
+        }
+
+        return $groupedMaps;
     }
 }
