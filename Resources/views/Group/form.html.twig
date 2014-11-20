@@ -1,0 +1,20 @@
+{% extends "AstinaRedirectManagerBundle::content_layout.html.twig" %}
+{% trans_default_domain "AstinaRedirectManagerBundle" %}
+
+{% block armb_content %}
+
+    <h2>{{ (group.id? 'list.edit_group' : 'list.new_group') | trans }}</h2>
+
+    <form action="{{ group.id ? path('armg_group_edit', {'id': group.id}) : path('armg_group_new') }}" method="post" {{ form_enctype(form) }} novalidate>
+        {{ form_widget(form) }}
+        <input class="btn btn-primary" type="submit" value="{{ 'form.submit' | trans }}" />
+    </form>
+
+    {% if group.id %}
+        <hr />
+        <form action="{{ path('armg_group_delete', {'id': group.id}) }}" method="post">
+            <input type="submit" class="btn btn-danger" value="{{ 'group.delete' | trans }}" />
+        </form>
+    {% endif %}
+
+{% endblock %}

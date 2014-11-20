@@ -13,6 +13,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class MapRepository extends EntityRepository
 {
+    public function findAll()
+    {
+        return $this->createQueryBuilder('m')
+            ->leftJoin('m.group', 'g')
+            ->orderBy('g.priority')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     /**
      * @param string $url
      * @param string $path
@@ -26,7 +36,9 @@ class MapRepository extends EntityRepository
             ->orWhere('m.urlFrom = :url')
             ->setParameter('path', $path)
             ->setParameter('url', $url)
-            ->orderBy('m.urlFrom', 'desc') // urls starting with "http" will be sorted before urls starting with "/"
+            ->leftJoin('m.group', 'g')
+            ->orderBy('g.priority')
+            ->addOrderBy('m.urlFrom', 'desc') // urls starting with "http" will be sorted before urls starting with "/"
             ->setMaxResults(1)
             ->getQuery()
             ->getResult();

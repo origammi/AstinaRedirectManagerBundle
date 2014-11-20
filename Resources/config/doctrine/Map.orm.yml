@@ -22,4 +22,8 @@ Astina\Bundle\RedirectManagerBundle\Entity\Map:
         redirectHttpCode:
             type: string
             length: 3
+    manyToOne:
+        group:
+            targetEntity: Astina\Bundle\RedirectManagerBundle\Entity\Group
+            joinColumn: { onDelete: "set null" }
     lifecycleCallbacks: {  }

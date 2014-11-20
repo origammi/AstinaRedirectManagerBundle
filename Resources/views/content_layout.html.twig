@@ -9,7 +9,7 @@
     {% for type, flashMessages in app.session.flashbag.all() %}
         {% for msg in flashMessages %}
             <div class="alert alert-{{ type }}">
-                {{ msg | trans }}
+                {{ msg | trans({}, 'AstinaRedirectManagerBundle') }}
             </div>
         {% endfor %}
     {% endfor %}

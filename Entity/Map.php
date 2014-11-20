@@ -13,6 +13,11 @@ class Map
     private $id;
 
     /**
+     * @var Group
+     */
+    private $group;
+
+    /**
      * @var string $urlFrom
      */
     private $urlFrom;
@@ -47,6 +52,22 @@ class Map
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return Group
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * @param Group $group
+     */
+    public function setGroup(Group $group = null)
+    {
+        $this->group = $group;
     }
 
     /**

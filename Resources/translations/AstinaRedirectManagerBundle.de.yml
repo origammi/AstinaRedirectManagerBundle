@@ -12,14 +12,26 @@ mapping:
       success: "Weiterleitung gelöscht."
       error: "Weiterleitung konnte nicht gelöscht werden."
 
+group:
+    flash:
+        group_created:
+            success: "Gruppe erstellt."
+        group_updated:
+            success: "Gruppe gespeichert."
+        group_deleted:
+            success: "Gruppe gelöscht."
+    delete: "Gruppe löschen"
+
 form:
   urlFrom: "Von URL"
   urlTo: "Zu URL"
-  submit: "Erstellen"
+  submit: "Speichern"
   save: "Speichern"
 
 list:
-  new: "Neu"
+  new: "Neue Weiterleitung"
+  new_group: "Neue Gruppe"
+  edit_group: "Gruppe bearbeiten"
   url:
     from: "Von URL"
     to:   "Zu URL"

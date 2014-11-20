@@ -3,7 +3,10 @@
 
 {% block armb_content  %}
     {% if maps | length > 0 %}
-        <a href="{{ path('armb_new_map') }}" class="btn btn-primary pull-right">{{ 'list.new' | trans }}</a>
+        <div class="btn-group pull-right">
+            <a href="{{ path('armb_new_map') }}" class="btn btn-primary"><span class="icon-plus icon-white"></span> {{ 'list.new' | trans }}</a>
+            <a href="{{ path('armg_group_new') }}" class="btn"><span class="icon-plus"></span> {{ 'list.new_group' | trans }}</a>
+        </div>
         <table class="table table-condensed">
             <thead>
                 <tr>
@@ -15,36 +18,50 @@
                 </tr>
             </thead>
             <tbody>
+                {% set current_group = null %}
                 {% for map in maps %}
-                <tr>
-                    <td>
-                        <a target="_blank" href="{{ map.urlFrom }}">{{ map.urlFrom }}</a>
-                    </td>
-                    <td>
-                        <a target="_blank" href="{{ map.urlTo }}">{{ map.urlTo }}</a>
-                    </td>
-                    <td>{{ map.redirectHttpCode }}</td>
-                    <td>
-                        {% if map.countRedirects %}
-                            {{ map.count }}
-                        {% else %}
-                            {{ 'list.no_data' | trans }}
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a href="{{ path('armb_edit_map', {id:map.id}) }}" class="btn btn-info btn"><i class="icon-edit"></i></a>
-                        <a href="#deleteRedirect" class="delete btn btn-danger btn" data-toggle="modal" data-deleteurl="{{ path('armb_delete_map', {id:map.id}) }}"><i class="icon-remove"></i></a>
-                    </td>
-                </tr>
+                    {% if map.group and current_group != map.group %}
+                        <tr>
+                            <td colspan="5">
+                                <h3>
+                                    {{ map.group.name }}
+                                    <a href="{{ path('armg_group_edit', {'id': map.group.id}) }}" class="btn btn-link"><i class="icon-pencil"></i></a>
+                                </h3>
+                            </td>
+                        </tr>
+                        {% set current_group = map.group %}
+                    {% endif %}
+                    <tr>
+                        <td>
+                            <a target="_blank" href="{{ map.urlFrom }}">{{ map.urlFrom }}</a>
+                        </td>
+                        <td>
+                            <a target="_blank" href="{{ map.urlTo }}">{{ map.urlTo }}</a>
+                        </td>
+                        <td>{{ map.redirectHttpCode }}</td>
+                        <td>
+                            {% if map.countRedirects %}
+                                {{ map.count }}
+                            {% else %}
+                                {{ 'list.no_data' | trans }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ path('armb_edit_map', {id:map.id}) }}" class="btn btn-info btn"><i class="icon-edit"></i></a>
+                            <a href="#deleteRedirect" class="delete btn btn-danger btn" data-toggle="modal" data-deleteurl="{{ path('armb_delete_map', {id:map.id}) }}"><i class="icon-trash icon-white"></i></a>
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
         <div class="alert alert-block">
             <h4>{{ 'list.no_redirects.title' | trans }}</h4>
-            <p>{{ 'list.no_redirects.description' | trans }}</p>
-            <a href="{{ path('armb_new_map') }}" class="btn btn-large btn-primary btn">{{ 'list.no_redirects.button' | trans }}</a>
+            {{ 'list.no_redirects.description' | trans }}
         </div>
+        <p>
+            <a href="{{ path('armb_new_map') }}" class="btn btn-large btn-primary btn">{{ 'list.no_redirects.button' | trans }}</a>
+        </p>
     {% endif %}
     <!-- Modal -->
     <div id="deleteRedirect" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

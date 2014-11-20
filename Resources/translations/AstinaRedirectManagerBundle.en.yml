@@ -12,6 +12,16 @@ mapping:
       success: "Redirection deleted successfully."
       error: "Can't delete redirection."
 
+group:
+    flash:
+        group_created:
+            success: "Group created."
+        group_updated:
+            success: "Group updated."
+        group_deleted:
+            success: "Group deleted."
+    delete: "Delete group"
+
 form:
   urlFrom: "From URL"
   urlTo: "To URL"
@@ -19,7 +29,9 @@ form:
   save: "Save"
 
 list:
-  new: "New"
+  new: "New Redirect"
+  new_group: "New Group"
+  edit_group: "Edit Group"
   url:
     from: "From URL"
     to:   "To URL"
