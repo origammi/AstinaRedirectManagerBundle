@@ -24,6 +24,30 @@ class MapRepository extends EntityRepository
         ;
     }
 
+    public function search($term = null)
+    {
+        $qb = $this->createQueryBuilder('m')
+            ->leftJoin('m.group', 'g')
+            ->orderBy('g.priority')
+            ->addOrderBy('m.urlFrom')
+        ;
+
+        if (null !== $term) {
+            $qb
+                ->where('m.urlFrom like :term')
+                ->orWhere('m.urlTo like :term')
+                ->orWhere('m.comment like :term')
+                ->orWhere('g.name like :term')
+                ->setParameter('term', '%' . $term . '%')
+            ;
+        }
+
+        return $qb
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     /**
      * @param string $url
      * @param string $path

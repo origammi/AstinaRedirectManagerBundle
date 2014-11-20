@@ -25,14 +25,18 @@ class MappingController extends Controller
     /**
      * @Template()
      *
+     * @param Request $request
      * @return array
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $maps = $this->getMapRepository()->findAll();
+        $search = $request->get('search');
+
+        $maps = $this->getMapRepository()->search($search);
 
         return array(
-            'maps' => $maps
+            'maps' => $maps,
+            'search' => $search,
         );
     }
 
@@ -141,7 +145,6 @@ class MappingController extends Controller
 
         return $this->redirect($this->generateUrl('armb_homepage'));
     }
-
 
     /**
      * Get repository for Map entity.

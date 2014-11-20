@@ -52,9 +52,9 @@ list:
   count: "Redirect events"
   no_data: "No data"
   no_redirects:
-    title: "No redirects found!"
+    title: "No redirects found."
     description: "There are no redirects in the database. You should create one."
-    button: "Start redirecting now!"
+    button: "Start redirecting now"
 
 modal:
   delete:

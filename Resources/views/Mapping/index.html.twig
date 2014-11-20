@@ -2,12 +2,20 @@
 {% trans_default_domain "AstinaRedirectManagerBundle" %}
 
 {% block armb_content  %}
-    {% if maps | length > 0 %}
+    {% if maps | length > 0 or search %}
         <div class="btn-group pull-right">
             <a href="{{ path('armb_new_map') }}" class="btn btn-primary"><span class="icon-plus icon-white"></span> {{ 'list.new' | trans }}</a>
             <a href="{{ path('armg_group_new') }}" class="btn"><span class="icon-plus"></span> {{ 'list.new_group' | trans }}</a>
             <p>&nbsp;</p>
         </div>
+
+        <form method="get" action="{{ path('armb_homepage') }}" class="form-inline">
+            <div class="input-append">
+                <input type="text" name="search" value="{{ search }}">
+                <button type="submit" class="btn"><i class="icon-search"></i></button>
+            </div>
+        </form>
+
         <table class="table table-condensed">
             <thead>
                 <tr>
@@ -41,7 +49,7 @@
                                 <a target="_blank" href="{{ map.urlFrom }}">{{ map.urlFrom }}</a>
                             {% endif %}
                             {% if map.comment|trim %}
-                                <p>{{ map.comment|nl2br }}</p>
+                                <p class="muted">{{ map.comment|nl2br }}</p>
                             {% endif %}
                         </td>
                         <td>
