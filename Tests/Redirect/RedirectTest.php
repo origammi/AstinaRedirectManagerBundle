@@ -19,7 +19,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     public function testMatchesHost($hostPattern, $requestUrl, $isRegex, $negate, $match)
     {
-        $redirect = $this->createRedirect($hostPattern, $requestUrl, $isRegex, $negate);
+        $redirect = $this->createRedirect($hostPattern, null, $requestUrl, $isRegex, $negate);
 
         $this->assertEquals($match, $redirect->matchesHost());
     }
@@ -36,6 +36,32 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param string $urlFrom
+     * @param string $requestUrl
+     * @param boolean $isRegex
+     * @param boolean $match
+     *
+     * @dataProvider pathProvider
+     */
+    public function testMatchesPath($urlFrom, $requestUrl, $isRegex, $match)
+    {
+        $redirect = $this->createRedirect(null, $urlFrom, $requestUrl, $isRegex, false, $match);
+
+        $this->assertEquals($match, $redirect->matchesPath());
+    }
+
+    public function pathProvider()
+    {
+        return array(
+            array('/piff', '/piff', false, true),
+            array('^/foo/.+$', '/foo/123', true, true),
+            array('^/foo/.+$', '/foo/', true, false),
+            array('^/foo/(.+)$', '/foo/bar', true, true),
+            array('^/foo/.+$', '/foo/123', false, false),
+        );
+    }
+
+    /**
      * @param string $hostPattern
      * @param string $requestUrl
      * @param string $urlTo
@@ -45,7 +71,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplacements($hostPattern, $requestUrl, $urlTo, $expectedRedirectUrl)
     {
-        $redirect = $this->createRedirect($hostPattern, $requestUrl, true, false, $urlTo);
+        $redirect = $this->createRedirect($hostPattern, null, $requestUrl, true, false, $urlTo);
 
         $this->assertEquals($expectedRedirectUrl, $redirect->getRedirectUrl());
     }
@@ -59,10 +85,12 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function createRedirect($hostPattern, $requestUrl, $isRegex = false, $negate = false, $urlTo = null)
+    protected function createRedirect($hostPattern, $urlFrom, $requestUrl, $isRegex = false, $negate = false, $urlTo = null)
     {
         $request = Request::create($requestUrl);
         $map = new Map();
+        $map->setUrlFrom($urlFrom);
+        $map->setUrlFromIsRegexPattern($isRegex);
         $map->setUrlTo($urlTo);
         $map->setHost($hostPattern);
         $map->setHostIsRegexPattern($isRegex);
