@@ -65,6 +65,11 @@ class Map
     private $redirectHttpCode = 302;
 
     /**
+     * @var string
+     */
+    private $comment;
+
+    /**
      * Get id
      *
      * @return integer
@@ -286,5 +291,21 @@ class Map
     public function getRedirectHttpCode()
     {
         return $this->redirectHttpCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param string $comment
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
     }
 }

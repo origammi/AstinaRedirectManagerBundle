@@ -6,6 +6,7 @@
         {{ form_widget(form) }}
         <div class="form-actions">
             <input class="btn btn-primary" type="submit" value= "{{ "form.save" | trans }}" />
+            <a href="{{ path('armb_homepage') }}" class="btn">{{ 'form.abort' | trans }}</a>
         </div>
     </form>
 {% endblock %}

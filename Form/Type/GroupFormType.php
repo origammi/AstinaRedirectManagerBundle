@@ -10,8 +10,8 @@ class GroupFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
-            ->add('priority', 'number')
+            ->add('name', null, array('label' => 'form.name', 'translation_domain' => 'AstinaRedirectManagerBundle'))
+            ->add('priority', 'number',  array('label' => 'form.priority', 'translation_domain' => 'AstinaRedirectManagerBundle'))
         ;
     }
 

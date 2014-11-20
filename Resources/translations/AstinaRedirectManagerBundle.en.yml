@@ -30,9 +30,14 @@ form:
   urlFrom: "From URL / Path"
   urlFromIsRegexPattern: "Treat URL / Path as Regex Pattern"
   urlTo: "To URL / Path"
+  redirectHttpCode: HTTP code
   countRedirects: "Count Redirects"
+  comment: "Comment"
   submit: "Create"
   save: "Save"
+  abort: "Abort"
+  name: "Name"
+  priority: "Priority"
 
 list:
   new: "New Redirect"

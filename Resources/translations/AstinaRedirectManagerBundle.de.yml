@@ -30,9 +30,14 @@ form:
   urlFrom: "Von URL / Pfad"
   urlFromIsRegexPattern: "URL / Pfad als Regex-Pattern behandeln"
   urlTo: "Zu URL / Pfad"
+  redirectHttpCode: HTTP-Code
   countRedirects: "Weiterleitungen zählen"
+  comment: "Kommentar"
   submit: "Speichern"
   save: "Speichern"
+  abort: "Abbrechen"
+  name: "Name"
+  priority: "Priorität"
 
 list:
   new: "Neue Weiterleitung"

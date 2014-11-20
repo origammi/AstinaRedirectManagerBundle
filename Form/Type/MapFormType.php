@@ -4,6 +4,7 @@ namespace Astina\Bundle\RedirectManagerBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Class MapFormType
@@ -56,12 +57,33 @@ class MapFormType extends AbstractType
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
             ))
+            ->add('redirectHttpCode', 'choice', array(
+                'label' => 'form.redirectHttpCode',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+                'choices' => array(
+                    301 => '301 Moved Permanently',
+                    302 => '302 Found',
+                    303 => '303 See Other',
+                ),
+            ))
             ->add('countRedirects', 'checkbox', array(
                 'label' => 'form.countRedirects',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
             ))
+            ->add('comment', 'textarea', array(
+                'label' => 'form.comment',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+                'required' => false,
+            ))
         ;
+    }
+
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'Astina\Bundle\RedirectManagerBundle\Entity\Map'
+        ));
     }
 
     /**

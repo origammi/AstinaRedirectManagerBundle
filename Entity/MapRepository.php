@@ -18,6 +18,7 @@ class MapRepository extends EntityRepository
         return $this->createQueryBuilder('m')
             ->leftJoin('m.group', 'g')
             ->orderBy('g.priority')
+            ->addOrderBy('m.urlFrom')
             ->getQuery()
             ->getResult()
         ;

@@ -6,6 +6,7 @@
         <div class="btn-group pull-right">
             <a href="{{ path('armb_new_map') }}" class="btn btn-primary"><span class="icon-plus icon-white"></span> {{ 'list.new' | trans }}</a>
             <a href="{{ path('armg_group_new') }}" class="btn"><span class="icon-plus"></span> {{ 'list.new_group' | trans }}</a>
+            <p>&nbsp;</p>
         </div>
         <table class="table table-condensed">
             <thead>
@@ -39,6 +40,9 @@
                             {% else %}
                                 <a target="_blank" href="{{ map.urlFrom }}">{{ map.urlFrom }}</a>
                             {% endif %}
+                            {% if map.comment|trim %}
+                                <p>{{ map.comment|nl2br }}</p>
+                            {% endif %}
                         </td>
                         <td>
                             {% if map.urlToContainsPlaceholders %}
@@ -58,7 +62,7 @@
                             {% if map.countRedirects %}
                                 {{ map.count }}
                             {% else %}
-                                {{ 'list.no_data' | trans }}
+                                <span class="muted">{{ 'list.no_data' | trans }}</span>
                             {% endif %}
                         </td>
                         <td>
@@ -82,7 +86,7 @@
     <div id="deleteRedirect" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">{{ 'modal.delete.title' | trans }}</h3>
+            <h3>{{ 'modal.delete.title' | trans }}</h3>
         </div>
         <div class="modal-body">
             <p>{{ 'modal.delete.message' | trans }}</p>

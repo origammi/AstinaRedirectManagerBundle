@@ -45,7 +45,7 @@ class MappingController extends Controller
      */
     public function newAction(Request $request)
     {
-        $form = $this->createForm(new MapFormType());
+        $form = $this->createForm(new MapFormType(), new Map());
 
         if ($request->getMethod() === 'POST') {
             return $this->createAction($request);

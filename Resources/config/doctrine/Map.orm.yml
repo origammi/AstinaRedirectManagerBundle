@@ -36,6 +36,9 @@ Astina\Bundle\RedirectManagerBundle\Entity\Map:
         redirectHttpCode:
             type: string
             length: 3
+        comment:
+            type: text
+            nullable: true
     manyToOne:
         group:
             targetEntity: Astina\Bundle\RedirectManagerBundle\Entity\Group
