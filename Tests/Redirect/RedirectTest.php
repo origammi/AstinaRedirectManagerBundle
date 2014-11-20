@@ -11,13 +11,15 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $hostPattern
      * @param string $requestUrl
-     * @param string $match
+     * @param boolean $isRegex
+     * @param boolean $negate
+     * @param boolean $match
      *
      * @dataProvider hostProvider
      */
-    public function testMatchesHost($hostPattern, $requestUrl, $match)
+    public function testMatchesHost($hostPattern, $requestUrl, $isRegex, $negate, $match)
     {
-        $redirect = $this->createRedirect($hostPattern, $requestUrl);
+        $redirect = $this->createRedirect($hostPattern, $requestUrl, $isRegex, $negate);
 
         $this->assertEquals($match, $redirect->matchesHost());
     }
@@ -25,11 +27,11 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     public function hostProvider()
     {
         return array(
-            array('www.example.org', 'https://www.example.org/', true),
-            array('^[^.]+\.example\.org$', 'http://www.example.org/', true),
-            array('^[^.]+\.example\.org$', 'http://example.org/', false),
-            array('!^[^.]+\.example\.org$', 'http://example.org/', true),
-            array(null, 'http://www.foo.bar', true)
+            array('www.example.org', 'https://www.example.org/', false, false, true),
+            array('^[^.]+\.example\.org$', 'http://www.example.org/', true, false, true),
+            array('^[^.]+\.example\.org$', 'http://example.org/', true, false, false),
+            array('^[^.]+\.example\.org$', 'http://example.org/', true, true, true),
+            array(null, 'http://www.foo.bar', false, false, true)
         );
     }
 
@@ -43,7 +45,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplacements($hostPattern, $requestUrl, $urlTo, $expectedRedirectUrl)
     {
-        $redirect = $this->createRedirect($hostPattern, $requestUrl, $urlTo);
+        $redirect = $this->createRedirect($hostPattern, $requestUrl, true, false, $urlTo);
 
         $this->assertEquals($expectedRedirectUrl, $redirect->getRedirectUrl());
     }
@@ -57,12 +59,14 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function createRedirect($hostPattern, $requestUrl, $urlTo = null)
+    protected function createRedirect($hostPattern, $requestUrl, $isRegex = false, $negate = false, $urlTo = null)
     {
         $request = Request::create($requestUrl);
         $map = new Map();
         $map->setUrlTo($urlTo);
-        $map->setHostPattern($hostPattern);
+        $map->setHost($hostPattern);
+        $map->setHostIsRegexPattern($isRegex);
+        $map->setHostRegexPatternNegate($negate);
 
         return new Redirect($request, $map);
     }

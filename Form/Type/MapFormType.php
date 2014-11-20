@@ -21,9 +21,46 @@ class MapFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('group', 'entity', array('required' => false, 'property' => 'name', 'class' => 'AstinaRedirectManagerBundle:Group'))
-            ->add('urlFrom', 'text', array('label' => 'form.urlFrom', 'translation_domain' => 'AstinaRedirectManagerBundle'))
-            ->add('urlTo', 'text', array('label' => 'form.urlTo', 'translation_domain' => 'AstinaRedirectManagerBundle'))
+            ->add('urlFrom', 'text', array(
+                'label' => 'form.urlFrom',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+            ))
+            ->add('urlFromIsRegexPattern', 'checkbox', array(
+                'label' => 'form.urlFromIsRegexPattern',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+                'required' => false,
+            ))
+            ->add('urlTo', 'text', array(
+                'label' => 'form.urlTo',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+            ))
+            ->add('group', 'entity', array(
+                'label' => 'form.group',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+                'required' => false,
+                'property' => 'name',
+                'class' => 'AstinaRedirectManagerBundle:Group',
+            ))
+            ->add('host', 'text', array(
+                'label' => 'form.host',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+                'required' => false,
+            ))
+            ->add('hostIsRegexPattern', 'checkbox', array(
+                'label' => 'form.hostIsRegexPattern',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+                'required' => false,
+            ))
+            ->add('hostRegexPatternNegate', 'checkbox', array(
+                'label' => 'form.hostRegexPatternNegate',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+                'required' => false,
+            ))
+            ->add('countRedirects', 'checkbox', array(
+                'label' => 'form.countRedirects',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+                'required' => false,
+            ))
         ;
     }
 

@@ -13,18 +13,24 @@ mapping:
       error: "Can't delete redirection."
 
 group:
-    flash:
-        group_created:
-            success: "Group created."
-        group_updated:
-            success: "Group updated."
-        group_deleted:
-            success: "Group deleted."
-    delete: "Delete group"
+  flash:
+    group_created:
+      success: "Group created."
+    group_updated:
+      success: "Group updated."
+    group_deleted:
+      success: "Group deleted."
+  delete: "Delete group"
 
 form:
-  urlFrom: "From URL"
-  urlTo: "To URL"
+  group: "Group"
+  host: "Domain"
+  hostIsRegexPattern: "Treat Domain as Regex Pattern"
+  hostRegexPatternNegate: "Exclude domain"
+  urlFrom: "From URL / Path"
+  urlFromIsRegexPattern: "Treat URL / Path as Regex Pattern"
+  urlTo: "To URL / Path"
+  countRedirects: "Count Redirects"
   submit: "Create"
   save: "Save"
 
@@ -35,6 +41,8 @@ list:
   url:
     from: "From URL"
     to:   "To URL"
+  host: "Domain"
+  host_regex_pattern_negate: "not"
   http_code: "HTTP code"
   count: "Redirect events"
   no_data: "No data"

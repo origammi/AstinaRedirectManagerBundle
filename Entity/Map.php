@@ -13,11 +13,6 @@ class Map
     private $id;
 
     /**
-     * @var string
-     */
-    private $hostPattern;
-
-    /**
      * @var Group
      */
     private $group;
@@ -28,9 +23,29 @@ class Map
     private $urlFrom;
 
     /**
+     * @var boolean
+     */
+    private $urlFromIsRegexPattern;
+
+    /**
      * @var string $urlTo
      */
     private $urlTo;
+
+    /**
+     * @var string
+     */
+    private $host;
+
+    /**
+     * @var string
+     */
+    private $hostIsRegexPattern;
+
+    /**
+     * @var boolean
+     */
+    private $hostRegexPatternNegate;
 
     /**
      * @var integer $count
@@ -57,22 +72,6 @@ class Map
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @param string $hostPattern
-     */
-    public function setHostPattern($hostPattern)
-    {
-        $this->hostPattern = $hostPattern;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHostPattern()
-    {
-        return $this->hostPattern;
     }
 
     /**
@@ -116,6 +115,22 @@ class Map
     }
 
     /**
+     * @return boolean
+     */
+    public function getUrlFromIsRegexPattern()
+    {
+        return $this->urlFromIsRegexPattern;
+    }
+
+    /**
+     * @param boolean $urlFromIsRegexPattern
+     */
+    public function setUrlFromIsRegexPattern($urlFromIsRegexPattern)
+    {
+        $this->urlFromIsRegexPattern = $urlFromIsRegexPattern;
+    }
+
+    /**
      * Set urlTo
      *
      * @param string $urlTo
@@ -137,6 +152,59 @@ class Map
     public function getUrlTo()
     {
         return $this->urlTo;
+    }
+
+    public function urlToContainsPlaceholders()
+    {
+        return preg_match('/\$[0-9]/', $this->urlTo);
+    }
+
+    /**
+     * @param string $host
+     */
+    public function setHost($host)
+    {
+        $this->host = $host;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHostIsRegexPattern()
+    {
+        return $this->hostIsRegexPattern;
+    }
+
+    /**
+     * @param string $hostIsRegexPattern
+     */
+    public function setHostIsRegexPattern($hostIsRegexPattern)
+    {
+        $this->hostIsRegexPattern = $hostIsRegexPattern;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isHostRegexPatternNegate()
+    {
+        return $this->hostRegexPatternNegate;
+    }
+
+    /**
+     * @param boolean $hostRegexPatternNegate
+     */
+    public function setHostRegexPatternNegate($hostRegexPatternNegate)
+    {
+        $this->hostRegexPatternNegate = $hostRegexPatternNegate;
     }
 
     /**

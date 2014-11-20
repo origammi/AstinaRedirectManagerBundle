@@ -3,20 +3,29 @@ Astina\Bundle\RedirectManagerBundle\Entity\Map:
     table: armb_redirect_map
     repositoryClass: Astina\Bundle\RedirectManagerBundle\Entity\MapRepository
     uniqueConstraints:
-        hostPattern_urlFrom: { columns: [hostPattern, urlFrom] }
+        host_urlFrom: { columns: [host, urlFrom] }
     fields:
         id:
             type: integer
             id: true
             generator:
                 strategy: AUTO
-        hostPattern:
+        host:
             type: string
             length: 255
+            nullable: true
+        hostIsRegexPattern:
+            type: boolean
+            nullable: true
+        hostRegexPatternNegate:
+            type: boolean
             nullable: true
         urlFrom:
             type: string
             length: 255
+        urlFromIsRegexPattern:
+            type: boolean
+            nullable: true
         urlTo:
             type: string
             length: 255

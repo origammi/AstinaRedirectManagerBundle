@@ -43,7 +43,7 @@ class RedirectFinder implements RedirectFinderInterface
         // find possible candidates for redirection
         /** @var MapRepository $repo */
         $repo = $this->doctrine->getRepository('AstinaRedirectManagerBundle:Map');
-        $maps = $repo->findForUrlOrPath($url, $path);
+        $maps = $repo->findCandidatesForUrlOrPath($url, $path);
 
         if (empty($maps)) {
             return null;
@@ -77,7 +77,7 @@ class RedirectFinder implements RedirectFinderInterface
     {
         foreach ($maps as $map) {
             $redirect = new Redirect($request, $map);
-            if ($redirect->matchesHost()) {
+            if ($redirect->matchesRequest()) {
                 return $redirect;
             }
         }

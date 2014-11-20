@@ -44,6 +44,29 @@ class MapRepository extends EntityRepository
     }
 
     /**
+     * Returns entries that either match or that need further regex matching (host and/or path)
+     *
+     * @param $url
+     * @param $path
+     * @return Map[]
+     */
+    public function findCandidatesForUrlOrPath($url, $path)
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.urlFrom = :path')
+            ->orWhere('m.urlFrom = :url')
+            ->orWhere('m.urlFromIsRegexPattern is not null')
+            ->orWhere('m.urlFromIsRegexPattern = 0')
+            ->setParameter('path', $path)
+            ->setParameter('url', $url)
+            ->leftJoin('m.group', 'g')
+            ->orderBy('g.priority')
+            ->addOrderBy('m.urlFrom', 'desc') // urls starting with "http" will be sorted before urls starting with "/"
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @param string $url
      * @param string $path
      *

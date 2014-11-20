@@ -12,6 +12,7 @@
                 <tr>
                     <th>{{ 'list.url.from' | trans }}</th>
                     <th>{{ 'list.url.to' | trans }}</th>
+                    <th>{{ 'list.host' | trans }}</th>
                     <th>{{ 'list.http_code' | trans }}</th>
                     <th>{{ 'list.count' | trans }}</th>
                     <th>&nbsp;</th>
@@ -22,7 +23,7 @@
                 {% for map in maps %}
                     {% if map.group and current_group != map.group %}
                         <tr>
-                            <td colspan="5">
+                            <td colspan="6">
                                 <h3>
                                     {{ map.group.name }}
                                     <a href="{{ path('armg_group_edit', {'id': map.group.id}) }}" class="btn btn-link"><i class="icon-pencil"></i></a>
@@ -33,10 +34,24 @@
                     {% endif %}
                     <tr>
                         <td>
-                            <a target="_blank" href="{{ map.urlFrom }}">{{ map.urlFrom }}</a>
+                            {% if map.urlFromIsRegexPattern %}
+                                {{ map.urlFrom }}
+                            {% else %}
+                                <a target="_blank" href="{{ map.urlFrom }}">{{ map.urlFrom }}</a>
+                            {% endif %}
                         </td>
                         <td>
-                            <a target="_blank" href="{{ map.urlTo }}">{{ map.urlTo }}</a>
+                            {% if map.urlToContainsPlaceholders %}
+                                {{ map.urlTo }}
+                            {% else %}
+                                <a target="_blank" href="{{ map.urlTo }}">{{ map.urlTo }}</a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if map.hostRegexPatternNegate %}
+                                <span class="muted">({{ 'list.host_regex_pattern_negate' | trans }})</span>
+                            {% endif %}
+                            {{ map.host }}
                         </td>
                         <td>{{ map.redirectHttpCode }}</td>
                         <td>
@@ -47,7 +62,7 @@
                             {% endif %}
                         </td>
                         <td>
-                            <a href="{{ path('armb_edit_map', {id:map.id}) }}" class="btn btn-info btn"><i class="icon-edit"></i></a>
+                            <a href="{{ path('armb_edit_map', {id:map.id}) }}" class="btn btn-info btn"><i class="icon-pencil"></i></a>
                             <a href="#deleteRedirect" class="delete btn btn-danger btn" data-toggle="modal" data-deleteurl="{{ path('armb_delete_map', {id:map.id}) }}"><i class="icon-trash icon-white"></i></a>
                         </td>
                     </tr>

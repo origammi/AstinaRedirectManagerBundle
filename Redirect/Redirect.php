@@ -50,25 +50,24 @@ class Redirect
 
     public function matchesHost()
     {
-        if (null == ($hostPattern = $this->map->getHostPattern())) {
+        if (null == ($host = $this->map->getHost())) {
             return true;
         }
 
-        $negate = false;
-        if ('!' === $hostPattern{0}) {
-            $hostPattern = substr($hostPattern, 1);
-            $negate = true;
+        if (!$this->map->getHostIsRegexPattern()) {
+            return $host === $this->request->getHost();
         }
 
-        $pattern = '#' . $hostPattern . '#';
-
-        return !$negate == preg_match($pattern, $this->request->getHost(), $this->patternMatches);
+        return !$this->map->isHostRegexPatternNegate() == preg_match('#' . $host . '#', $this->request->getHost(), $this->patternMatches);
     }
 
     public function matchesPath()
     {
-        // todo implement
-        return true;
+        if (!$this->map->getUrlFromIsRegexPattern()) {
+            return $this->map->getUrlFrom() === $this->request->getRequestUri();
+        }
+
+        return preg_match('#' . $this->map->getUrlFrom() . '#', $this->request->getRequestUri(), $this->patternMatches);
     }
 
     protected function applyReplacements($redirectUrl)
@@ -84,6 +83,8 @@ class Redirect
         foreach ($this->patternMatches as $group => $match) {
             $redirectUrl = str_replace('$' . $group, $match, $redirectUrl);
         }
+
+        $redirectUrl = preg_replace('/\$[0-9+]/', '', $redirectUrl);
 
         return $redirectUrl;
     }

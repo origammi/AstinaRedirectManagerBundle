@@ -4,7 +4,8 @@
 {% block armb_content  %}
     <form action="{{ path('armb_update_map', {id:map.id}) }}" method="post" {{ form_enctype(form) }} novalidate>
         {{ form_widget(form) }}
-
-        <input class="btn btn-primary" type="submit" value= "{{ "form.save" | trans }}" />
+        <div class="form-actions">
+            <input class="btn btn-primary" type="submit" value= "{{ "form.save" | trans }}" />
+        </div>
     </form>
 {% endblock %}

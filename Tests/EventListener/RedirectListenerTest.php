@@ -54,7 +54,7 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
 
         $repoMock
             ->expects($this->once())
-            ->method('findForUrlOrPath')
+            ->method('findCandidatesForUrlOrPath')
             ->will($this->returnValue(array($map)));
 
         $managerMock = $this
@@ -86,7 +86,8 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
 
         $redirectListener = new RedirectListener($redirectFinder);
 
-        $eventMock = $this->getResponseEventMock();
+        $requestMock = $this->getRequestMock('GET', null, '/something');
+        $eventMock = $this->getResponseEventMock($requestMock);
 
         $eventMock
             ->expects($this->once())
@@ -115,7 +116,7 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
 
         $repoMock
             ->expects($this->once())
-            ->method('findForUrlOrPath')
+            ->method('findCandidatesForUrlOrPath')
             ->with($this->anything(), $this->equalTo($result))
             ->will($this->returnValue(null));
 
