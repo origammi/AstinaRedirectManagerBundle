@@ -27,7 +27,7 @@ class Redirect
 
     public function getRedirectUrl()
     {
-        $redirectUrl =  $this->map->getUrlTo();
+        $redirectUrl = $this->map->getUrlTo();
 
         if (!$this->isAbsoluteUrl($redirectUrl) && $baseUrl = $this->request->getBaseUrl()) {
             $redirectUrl = $baseUrl . $redirectUrl;
@@ -50,7 +50,7 @@ class Redirect
 
     public function matchesHost()
     {
-        if (null == ($host = $this->map->getHost())) {
+        if (null === ($host = $this->map->getHost())) {
             return true;
         }
 
