@@ -54,4 +54,4 @@ class Group
     {
         $this->priority = $priority;
     }
-} 
+}

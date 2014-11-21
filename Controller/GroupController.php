@@ -67,4 +67,4 @@ class GroupController extends Controller
 
         return $this->redirect($this->generateUrl('armb_homepage'));
     }
-} 
+}

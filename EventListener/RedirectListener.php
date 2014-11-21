@@ -46,7 +46,7 @@ class RedirectListener
 
         $response = $this->redirectFinder->findRedirect($request);
 
-        if (null == $response) {
+        if (null === $response) {
             return;
         }
 
