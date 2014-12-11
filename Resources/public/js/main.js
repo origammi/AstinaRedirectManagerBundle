@@ -1,7 +1,9 @@
 $(function() {
 
     $advancedFields = $('[data-advanced-field]').closest('.control-group');
-    $advancedFields.hide();
+    if ($advancedFields.find(".form-errors").size() == 0) {
+        $advancedFields.hide();
+    }
     $('[data-action="toggle-advanced-fields"]').click(function(e) {
         e.preventDefault();
         $advancedFields.slideToggle();

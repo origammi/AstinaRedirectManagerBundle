@@ -2,7 +2,7 @@
 {% trans_default_domain "AstinaRedirectManagerBundle" %}
 
 {% block armb_content  %}
-    <form action="{{ path('armb_update_map', {id:map.id}) }}" method="post" {{ form_enctype(form) }} novalidate>
+    <form action="{{ path('armb_edit_map', {id:map.id}) }}" method="post" {{ form_enctype(form) }} novalidate>
         {{ form_widget(form) }}
         {% if not map.hasAdvancedSettings %}
             <hr />

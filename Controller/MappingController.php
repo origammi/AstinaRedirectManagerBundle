@@ -52,41 +52,26 @@ class MappingController extends Controller
      */
     public function newAction(Request $request)
     {
-        $form = $this->createForm(new MapFormType(), new Map());
-
-        if ($request->getMethod() === 'POST') {
-            return $this->createAction($request);
-        }
-
-        return array(
-            'form' => $form->createView()
-        );
-    }
-
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return RedirectResponse
-     */
-    private function createAction(Request $request)
-    {
         $map = new Map();
         $form = $this->createForm(new MapFormType(), $map);
 
-        $form->submit($request);
-
-        if ($form->isValid()) {
+        if ($form->handleRequest($request)->isValid()) {
             $em  = $this->getEm();
             $em->persist($map);
-            $em->flush();
-
-            $this->addFlash('success', 'mapping.flash.map_created.success');
+            try {
+                $em->flush();
+                $this->addFlash('success', 'mapping.flash.map_created.success');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'mapping.flash.map_created.error');
+                return $this->redirect($this->generateUrl('armb_new_map'));
+            }
 
             return $this->redirect($this->generateUrl('armb_homepage'));
         }
 
         return array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'map'  => $map,
         );
     }
 
@@ -97,40 +82,27 @@ class MappingController extends Controller
      *
      * @return array
      */
-    public function editAction(Map $map)
+    public function editAction(Map $map, Request $request)
     {
         $form = $this->createForm(new MapFormType(), $map);
+
+        if ($form->handleRequest($request)->isValid()) {
+            try {
+                $em = $this->getEm();
+                $em->flush();
+                $this->addFlash('success', 'mapping.flash.map_updated.success');
+            } catch (\Exception $e) {
+                $this->addFlash('error', 'mapping.flash.map_updated.error');
+                return $this->redirect($this->generateUrl('armb_edit_map', array('id' => $map->getId())));
+            }
+
+            return $this->redirect($this->generateUrl('armb_homepage'));
+        }
 
         return array(
             'form' => $form->createView(),
-            'map'  => $map
+            'map'  => $map,
         );
-    }
-
-    /**
-     * @param Map     $map
-     * @param Request $request
-     *
-     * @return RedirectResponse
-     */
-    public function updateAction(Map $map, Request $request)
-    {
-        $form = $this->createForm(new MapFormType(), $map);
-        $form->submit($request);
-
-        if ($form->isValid()) {
-            $em = $this->getEm();
-            $em->persist($map);
-            $em->flush();
-
-            $this->addFlash('success', 'mapping.flash.map_updated.success');
-
-            return $this->redirect($this->generateUrl('armb_homepage'));
-        } else {
-            $this->addFlash('error', 'mapping.flash.map_updated.error');
-
-            return $this->redirect($this->generateUrl('armb_edit_map', array('id' => $map->getId())));
-        }
     }
 
     /**

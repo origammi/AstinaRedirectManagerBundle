@@ -71,7 +71,8 @@ class Map
 
     public function hasAdvancedSettings()
     {
-        return $this->urlFromIsRegexPattern
+        return $this->host
+            || $this->urlFromIsRegexPattern
             || $this->hostIsRegexPattern
             || $this->hostRegexPatternNegate
             || $this->redirectHttpCode != 302
