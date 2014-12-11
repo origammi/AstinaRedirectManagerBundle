@@ -129,7 +129,7 @@ class MappingController extends Controller
         } else {
             $this->addFlash('error', 'mapping.flash.map_updated.error');
 
-            return $this->redirect($this->generateUrl('astina_edit_map', array('id' => $map->getId())));
+            return $this->redirect($this->generateUrl('armb_edit_map', array('id' => $map->getId())));
         }
     }
 
