@@ -26,6 +26,9 @@ Astina\Bundle\RedirectManagerBundle\Entity\Map:
         urlFromIsRegexPattern:
             type: boolean
             nullable: true
+        urlFromIsNoCase:
+            type: boolean
+            nullable: true
         urlTo:
             type: string
             length: 255

@@ -38,6 +38,12 @@ class MapFormType extends AbstractType
                 'required' => false,
                 'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
+            ->add('urlFromIsNoCase', 'checkbox', array(
+                'label' => 'form.urlFromIsNoCase',
+                'translation_domain' => 'AstinaRedirectManagerBundle',
+                'required' => false,
+                'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
+            ))
             ->add('urlTo', 'text', array(
                 'label' => 'form.urlTo',
                 'translation_domain' => 'AstinaRedirectManagerBundle',

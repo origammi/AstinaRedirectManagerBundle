@@ -26,6 +26,11 @@ class Map
      * @var boolean
      */
     private $urlFromIsRegexPattern;
+    
+    /**
+     * @var boolean
+     */
+    private $urlFromIsNoCase;    
 
     /**
      * @var string $urlTo
@@ -146,6 +151,22 @@ class Map
         $this->urlFromIsRegexPattern = $urlFromIsRegexPattern;
     }
 
+    /**
+     * @return boolean
+     */
+    public function getUrlFromIsNoCase()
+    {
+        return $this->urlFromIsNoCase;
+    }
+
+    /**
+     * @param boolean $urlFromIsNoCase
+     */
+    public function setUrlFromIsNoCase($urlFromIsNoCase)
+    {
+        $this->urlFromIsNoCase = $urlFromIsNoCase;
+    }
+    
     /**
      * Set urlTo
      *

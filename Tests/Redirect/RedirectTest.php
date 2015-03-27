@@ -19,7 +19,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     public function testMatchesHost($hostPattern, $requestUrl, $isRegex, $negate, $match)
     {
-        $redirect = $this->createRedirect($hostPattern, null, $requestUrl, $isRegex, $negate);
+        $redirect = $this->createRedirect($hostPattern, null, $requestUrl, $isRegex, false, $negate);
 
         $this->assertEquals($match, $redirect->matchesHost());
     }
@@ -39,13 +39,14 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      * @param string $urlFrom
      * @param string $requestUrl
      * @param boolean $isRegex
+     * @param boolean $isNoCase
      * @param boolean $match
      *
      * @dataProvider pathProvider
      */
-    public function testMatchesPath($urlFrom, $requestUrl, $isRegex, $match)
+    public function testMatchesPath($urlFrom, $requestUrl, $isRegex, $isNoCase, $match)
     {
-        $redirect = $this->createRedirect(null, $urlFrom, $requestUrl, $isRegex, false, $match);
+        $redirect = $this->createRedirect(null, $urlFrom, $requestUrl, $isRegex, $isNoCase, false, $match);
 
         $this->assertEquals($match, $redirect->matchesPath());
     }
@@ -53,11 +54,17 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
     public function pathProvider()
     {
         return array(
-            array('/piff', '/piff', false, true),
-            array('^/foo/.+$', '/foo/123', true, true),
-            array('^/foo/.+$', '/foo/', true, false),
-            array('^/foo/(.+)$', '/foo/bar', true, true),
-            array('^/foo/.+$', '/foo/123', false, false),
+            array('/piff',       '/piff',    false, false, true),
+            array('^/foo/.+$',   '/foo/123', true,  false, true),
+            array('^/foo/.+$',   '/foo/',    true,  false, false),
+            array('^/foo/(.+)$', '/foo/bar', true,  false, true),
+            array('^/foo/.+$',   '/foo/123', false, false, false),
+            
+            // test nocase flag
+            array('/piff',       '/PIFF',    false, true, true),
+            array('^/foo/(.+)$', '/FOO/BAR', true,  true, true),
+            array('/piff',       '/PIFF',    false, false, false),
+            array('^/foo/(.+)$', '/FOO/BAR', true,  false, false),
         );
     }
 
@@ -71,7 +78,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     public function testReplacements($hostPattern, $requestUrl, $urlTo, $expectedRedirectUrl)
     {
-        $redirect = $this->createRedirect($hostPattern, null, $requestUrl, true, false, $urlTo);
+        $redirect = $this->createRedirect($hostPattern, null, $requestUrl, true, false, false, $urlTo);
 
         $this->assertEquals($expectedRedirectUrl, $redirect->getRedirectUrl());
     }
@@ -85,12 +92,13 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function createRedirect($hostPattern, $urlFrom, $requestUrl, $isRegex = false, $negate = false, $urlTo = null)
+    protected function createRedirect($hostPattern, $urlFrom, $requestUrl, $isRegex = false, $isNoCase = false, $negate = false, $urlTo = null)
     {
         $request = Request::create($requestUrl);
         $map = new Map();
         $map->setUrlFrom($urlFrom);
         $map->setUrlFromIsRegexPattern($isRegex);
+        $map->setUrlFromIsNoCase($isNoCase);
         $map->setUrlTo($urlTo);
         $map->setHost($hostPattern);
         $map->setHostIsRegexPattern($isRegex);
