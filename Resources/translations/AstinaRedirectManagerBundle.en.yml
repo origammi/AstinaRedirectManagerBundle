@@ -29,6 +29,7 @@ form:
   hostRegexPatternNegate: "Exclude domain"
   urlFrom: "From URL / Path"
   urlFromIsRegexPattern: "Treat URL / Path as Regex Pattern"
+  urlFromIsNoCase: "URL / Path is case-insensitive"
   urlTo: "To URL / Path"
   redirectHttpCode: HTTP code
   countRedirects: "Count Redirects"

@@ -63,11 +63,21 @@ class Redirect
 
     public function matchesPath()
     {
+        $urlFrom = $this->map->getUrlFrom();
+        $requestUri = $this->request->getRequestUri();
+        
         if (!$this->map->getUrlFromIsRegexPattern()) {
-            return $this->map->getUrlFrom() === $this->request->getRequestUri();
+            
+            $strtolower = function_exists('mb_strtolower') ? 'mb_strtolower' : 'strtolower';
+            
+            return $this->map->getUrlFromIsNoCase() ? 
+                $strtolower($urlFrom) === $strtolower($requestUri) : 
+                $urlFrom === $requestUri
+            ;
         }
 
-        return preg_match('#' . $this->map->getUrlFrom() . '#', $this->request->getRequestUri(), $this->patternMatches);
+        $regexModifier = $this->map->getUrlFromIsNoCase() ? 'i' : '';
+        return preg_match('#' . $urlFrom . '#'.$regexModifier, $requestUri, $this->patternMatches);
     }
 
     protected function applyReplacements($redirectUrl)
