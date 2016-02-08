@@ -69,7 +69,7 @@ class Redirect
         if (!$this->map->getUrlFromIsRegexPattern()) {
             
             $strtolower = function_exists('mb_strtolower') ? 'mb_strtolower' : 'strtolower';
-            
+
             return $this->map->getUrlFromIsNoCase() ? 
                 $strtolower($urlFrom) === $strtolower($requestUri) : 
                 $urlFrom === $requestUri

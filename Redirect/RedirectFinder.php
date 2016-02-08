@@ -7,6 +7,7 @@ use Astina\Bundle\RedirectManagerBundle\Entity\MapRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class RedirectFinder
@@ -18,16 +19,16 @@ use Symfony\Component\HttpFoundation\Request;
 class RedirectFinder implements RedirectFinderInterface
 {
     /**
-     * @var RegistryInterface
+     * @var EntityManager
      */
-    protected $doctrine;
+    protected $entityManager;
 
     /**
      * @param RegistryInterface $doctrine
      */
-    public function __construct(RegistryInterface $doctrine)
+    public function __construct(EntityManager $entityManager)
     {
-        $this->doctrine = $doctrine;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -42,7 +43,7 @@ class RedirectFinder implements RedirectFinderInterface
 
         // find possible candidates for redirection
         /** @var MapRepository $repo */
-        $repo = $this->doctrine->getRepository('AstinaRedirectManagerBundle:Map');
+        $repo = $this->entityManager->getRepository('AstinaRedirectManagerBundle:Map');
         $maps = $repo->findCandidatesForUrlOrPath($url, $path);
 
         if (empty($maps)) {
@@ -60,9 +61,8 @@ class RedirectFinder implements RedirectFinderInterface
         $map = $redirect->getMap();
         if ($map->isCountRedirects()) {
             $map->increaseCount();
-            $em = $this->doctrine->getManager();
-            $em->persist($map);
-            $em->flush($map);
+            $this->entityManager->persist($map);
+            $this->entityManager->flush($map);
         }
 
         return new RedirectResponse($redirectUrl, $map->getRedirectHttpCode());

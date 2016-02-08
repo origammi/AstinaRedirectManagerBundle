@@ -35,6 +35,7 @@ form:
   countRedirects: "Count Redirects"
   comment: "Comment"
   submit: "Create"
+  edit: "Edit"
   save: "Save"
   abort: "Abort"
   name: "Name"

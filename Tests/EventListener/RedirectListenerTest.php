@@ -21,12 +21,12 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIfPostRequestAreSkipped()
     {
-        $doctrineMock = $this
-            ->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
+        $managerMock = $this
+            ->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $redirectFinder = new RedirectFinder($doctrineMock);
+        $redirectFinder = new RedirectFinder($managerMock);
 
         $redirectListener = new RedirectListener($redirectFinder);
 
@@ -65,24 +65,14 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
         $managerMock
             ->expects($this->once())
             ->method('persist')
-            ->with($map);
+            ->with($map);        
 
-        $doctrineMock = $this
-            ->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $doctrineMock
+        $managerMock
             ->expects($this->once())
             ->method('getRepository')
             ->will($this->returnValue($repoMock));
 
-        $doctrineMock
-            ->expects($this->once())
-            ->method('getManager')
-            ->will($this->returnValue($managerMock));
-
-        $redirectFinder = new RedirectFinder($doctrineMock);
+        $redirectFinder = new RedirectFinder($managerMock);
 
         $redirectListener = new RedirectListener($redirectFinder);
 
@@ -120,17 +110,17 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
             ->with($this->anything(), $this->equalTo($result))
             ->will($this->returnValue(null));
 
-        $doctrineMock = $this
-            ->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
+        $managerMock = $this
+            ->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $doctrineMock
+        $managerMock
             ->expects($this->once())
             ->method('getRepository')
             ->will($this->returnValue($repoMock));
 
-        $redirectFinder = new RedirectFinder($doctrineMock);
+        $redirectFinder = new RedirectFinder($managerMock);
 
         $redirectListener = new RedirectListener($redirectFinder);
 

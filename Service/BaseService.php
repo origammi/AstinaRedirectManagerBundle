@@ -32,6 +32,6 @@ abstract class BaseService
      */
     protected function getEm()
     {
-        return $this->doctrine->getManager();
+        return $this->doctrine->getManager('redirect');
     }
 }

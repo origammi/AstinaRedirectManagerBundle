@@ -39,6 +39,7 @@ class MappingController extends Controller
 
         return array(
             'grouped_maps' => $groupedMaps,
+            'layout' => $this->container->getParameter('astina_redirect_manager.base_layout'),
             'search' => $search,
         );
     }
@@ -71,6 +72,7 @@ class MappingController extends Controller
 
         return array(
             'form' => $form->createView(),
+            'layout' => $this->container->getParameter('astina_redirect_manager.base_layout'),
             'map'  => $map,
         );
     }
@@ -101,6 +103,7 @@ class MappingController extends Controller
 
         return array(
             'form' => $form->createView(),
+            'layout' => $this->container->getParameter('astina_redirect_manager.base_layout'),
             'map'  => $map,
         );
     }
@@ -128,7 +131,7 @@ class MappingController extends Controller
      */
     private function getMapRepository()
     {
-        return $this->getDoctrine()->getRepository('AstinaRedirectManagerBundle:Map');
+        return $this->getEm()->getRepository('AstinaRedirectManagerBundle:Map');
     }
 
     /**
@@ -138,7 +141,7 @@ class MappingController extends Controller
      */
     private function getEm()
     {
-        return $this->getDoctrine()->getManager();
+        return $this->get('astina_redirect_manager.em');
     }
 
     /**
@@ -158,7 +161,7 @@ class MappingController extends Controller
     private function groupMaps($maps)
     {
         /** @var Group[] $groups */
-        $groups = $this->getDoctrine()->getRepository('AstinaRedirectManagerBundle:Group')->findBy(array(), array('priority' => 'asc'));
+        $groups = $this->getEm()->getRepository('AstinaRedirectManagerBundle:Group')->findBy(array(), array('priority' => 'asc'));
 
         $groupedMaps = array();
         foreach ($maps as $map) {

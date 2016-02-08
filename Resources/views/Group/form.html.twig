@@ -8,7 +8,7 @@
     <form action="{{ group.id ? path('armg_group_edit', {'id': group.id}) : path('armg_group_new') }}" method="post" {{ form_enctype(form) }} novalidate>
         {{ form_widget(form) }}
         <div class="form-actions">
-            <input class="btn btn-primary" type="submit" value="{{ 'form.submit' | trans }}" />
+            <input class="btn btn-primary" type="submit" value="{{ (group.id? 'form.edit' : 'form.submit') | trans }}" />
             <a href="{{ path('armb_homepage') }}" class="btn">{{ 'form.abort' | trans }}</a>
         </div>
     </form>
