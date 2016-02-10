@@ -11,6 +11,8 @@ mapping:
     map_deleted:
       success: "Weiterleitung gelöscht."
       error: "Weiterleitung konnte nicht gelöscht werden."
+    map_circular_redirect:
+      error: "Rund Umleitung entdeckt"
 
 group:
   flash:
