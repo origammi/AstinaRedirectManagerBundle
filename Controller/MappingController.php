@@ -39,7 +39,7 @@ class MappingController extends Controller
 
         return array(
             'grouped_maps' => $groupedMaps,
-            'layout' => $this->container->getParameter('astina_redirect_manager.base_layout'),
+            'layout' => $this->container->getParameter('armb.base_layout'),
             'search' => $search,
         );
     }
@@ -57,6 +57,10 @@ class MappingController extends Controller
         $form = $this->createForm(new MapFormType(), $map);
 
         if ($form->handleRequest($request)->isValid()) {
+            if (!$this->get('armb.map_validator')->validate($map)) {
+                $this->addFlash('error', 'mapping.flash.map_circular_redirect.error');
+                goto render;
+            }
             $em  = $this->getEm();
             $em->persist($map);
             try {
@@ -69,10 +73,10 @@ class MappingController extends Controller
 
             return $this->redirect($this->generateUrl('armb_homepage'));
         }
-
+        render:
         return array(
             'form' => $form->createView(),
-            'layout' => $this->container->getParameter('astina_redirect_manager.base_layout'),
+            'layout' => $this->container->getParameter('armb.base_layout'),
             'map'  => $map,
         );
     }
@@ -89,6 +93,10 @@ class MappingController extends Controller
         $form = $this->createForm(new MapFormType(), $map);
 
         if ($form->handleRequest($request)->isValid()) {
+            if (!$this->get('armb.map_validator')->validate($map)) {
+                $this->addFlash('error', 'mapping.flash.map_circular_redirect.error');
+                goto render;
+            }
             try {
                 $em = $this->getEm();
                 $em->flush();
@@ -100,10 +108,10 @@ class MappingController extends Controller
 
             return $this->redirect($this->generateUrl('armb_homepage'));
         }
-
+        render:
         return array(
             'form' => $form->createView(),
-            'layout' => $this->container->getParameter('astina_redirect_manager.base_layout'),
+            'layout' => $this->container->getParameter('armb.base_layout'),
             'map'  => $map,
         );
     }
@@ -141,7 +149,7 @@ class MappingController extends Controller
      */
     private function getEm()
     {
-        return $this->get('astina_redirect_manager.em');
+        return $this->get('armb.em');
     }
 
     /**

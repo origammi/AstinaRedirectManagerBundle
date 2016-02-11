@@ -49,7 +49,7 @@ class AstinaRedirectManagerExtension extends Extension
             $subDomainDefinition->addArgument($config['redirect_subdomains']['redirect_code']);
         }
 
-        $container->setParameter('astina_redirect_manager.base_layout', $config['base_layout']);
+        $container->setParameter('armb.base_layout', $config['base_layout']);
         $this->addStorageDefinition($container, $config['storage']['entity_manager']);
 
         if (true === $config['enable_listeners']) {
@@ -68,7 +68,7 @@ class AstinaRedirectManagerExtension extends Extension
         } else {
             $entityManager = 'doctrine.orm.' . $entityManager . '_entity_manager';
         }
-        $container->setAlias('astina_redirect_manager.em', $entityManager);
+        $container->setAlias('armb.em', $entityManager);
     }
 
     /**

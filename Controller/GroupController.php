@@ -29,7 +29,7 @@ class GroupController extends Controller
             $translator = $this->get('translator');
 
             try {
-                $manager = $this->get('astina_redirect_manager.em');
+                $manager = $this->get('armb.em');
                 $manager->persist($group);
                 $manager->flush();
 
@@ -44,7 +44,7 @@ class GroupController extends Controller
 
         return $this->render('AstinaRedirectManagerBundle:Group:form.html.twig', array(
             'group' => $group,
-            'layout' => $this->container->getParameter('astina_redirect_manager.base_layout'),
+            'layout' => $this->container->getParameter('armb.base_layout'),
             'form' => $form->createView(),
         ));
     }
@@ -57,7 +57,7 @@ class GroupController extends Controller
         $translator = $this->get('translator');
 
         try {
-            $manager = $this->get('astina_redirect_manager.em');
+            $manager = $this->get('armb.em');
             $manager->remove($group);
             $manager->flush();
             $session->getFlashBag()->add('success', $translator->trans('group.flash.group_deleted.success', array(), 'AstinaRedirectManagerBundle'));

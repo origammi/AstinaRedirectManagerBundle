@@ -11,6 +11,8 @@ mapping:
     map_deleted:
       success: "Redirection deleted successfully."
       error: "Can't delete redirection."
+    map_circular_redirect:
+      error: "Circular redirect detected"
 
 group:
   flash:

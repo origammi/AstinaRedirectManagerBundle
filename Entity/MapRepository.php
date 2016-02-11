@@ -51,21 +51,26 @@ class MapRepository extends EntityRepository
     /**
      * @param string $url
      * @param string $path
+     * @param $excludeIds Optionally exclude records matching ids
      *
      * @return Map[]
      */
-    public function findForUrlOrPath($url, $path)
+    public function findForUrlOrPath($url, $path, array $excludeIds = [])
     {
-        return $this->createQueryBuilder('m')
+        $qb = $this->createQueryBuilder('m')
             ->where('m.urlFrom = :path')
             ->orWhere('m.urlFrom = :url')
             ->setParameter('path', $path)
             ->setParameter('url', $url)
             ->leftJoin('m.group', 'g')
             ->orderBy('g.priority')
-            ->addOrderBy('m.urlFrom', 'desc') // urls starting with "http" will be sorted before urls starting with "/"
-            ->getQuery()
-            ->getResult();
+            ->addOrderBy('m.urlFrom', 'desc'); // urls starting with "http" will be sorted before urls starting with "/"
+        if (\count($excludeIds)) {
+            $qb->andWhere('m.id NOT IN(:excludeIds)');
+            $qb->setParameter('excludeIds', $excludeIds);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
