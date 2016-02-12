@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Astina\Bundle\RedirectManagerBundle\Form\Type\MapFormType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -59,7 +60,7 @@ class MappingController extends Controller
         if ($form->handleRequest($request)->isValid()) {
             if (!$this->get('armb.map_validator')->validate($map)) {
                 $this->addFlash('error', 'mapping.flash.map_circular_redirect.error');
-                goto render;
+                return $this->createView($form, $map);
             }
             $em  = $this->getEm();
             $em->persist($map);
@@ -73,12 +74,8 @@ class MappingController extends Controller
 
             return $this->redirect($this->generateUrl('armb_homepage'));
         }
-        render:
-        return array(
-            'form' => $form->createView(),
-            'layout' => $this->container->getParameter('armb.base_layout'),
-            'map'  => $map,
-        );
+
+        return $this->createView($form, $map);
     }
 
     /**
@@ -95,7 +92,7 @@ class MappingController extends Controller
         if ($form->handleRequest($request)->isValid()) {
             if (!$this->get('armb.map_validator')->validate($map)) {
                 $this->addFlash('error', 'mapping.flash.map_circular_redirect.error');
-                goto render;
+                return $this->createView($form, $map);
             }
             try {
                 $em = $this->getEm();
@@ -108,7 +105,16 @@ class MappingController extends Controller
 
             return $this->redirect($this->generateUrl('armb_homepage'));
         }
-        render:
+
+        return $this->createView($form, $map);
+    }
+
+    /**
+     * @param Form $form
+     * @param Map $map
+     * @return array
+     */
+    private function createView(Form $form, Map $map) {
         return array(
             'form' => $form->createView(),
             'layout' => $this->container->getParameter('armb.base_layout'),

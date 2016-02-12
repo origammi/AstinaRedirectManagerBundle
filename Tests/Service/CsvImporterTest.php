@@ -13,6 +13,41 @@ use Astina\Bundle\RedirectManagerBundle\Service\CsvImporter;
 class CsvImporterTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var CsvImporter
+     */
+    private $csvImporter;
+
+    /**
+     * @var MockObject
+     */
+    private $managerMock;
+
+    /**
+     * Initialise
+     */
+    public function setUp()
+    {
+        $filePath = $this->getCsvFilePath('working-import-file');
+        $importCount = count(file($filePath));
+        $this->managerMock = $this
+            ->getMockBuilder('\Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mapValidatorMock = $this
+            ->getMockBuilder('Astina\Bundle\RedirectManagerBundle\Validator\MapValidator')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mapValidatorMock
+            ->expects($this->any())
+            ->method('validate')
+            ->will($this->returnValue(true));
+
+        $this->csvImporter = new CsvImporter($this->managerMock, $mapValidatorMock);
+    }
+
+    /**
      * Test basic csv file import.
      */
     public function testCsvImport()
@@ -20,31 +55,12 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
         $filePath = $this->getCsvFilePath('working-import-file');
         $importCount = count(file($filePath));
 
-        $managerMock = $this
-            ->getMockBuilder('\Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->managerMock->expects($this->exactly($importCount))->method('persist');
+        $this->managerMock->expects($this->once())->method('flush');
 
-        $managerMock
-            ->expects($this->exactly($importCount))
-            ->method('persist');
+        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
 
-        $managerMock
-            ->expects($this->once())
-            ->method('flush');
-
-        $doctrineMock = $this
-            ->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $doctrineMock
-            ->expects($this->once())
-            ->method('getManager')
-            ->will($this->returnValue($managerMock));
-
-        $csvImporter = new CsvImporter($doctrineMock);
-        $result = $csvImporter->import($filePath, 301, true);
+        $result = $this->csvImporter->import($filePath, 301, true, $outputMock);
 
         $this->assertEquals($importCount, $result, 'Method returns wrong number of imported items.');
     }
@@ -54,24 +70,10 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
      */
     public function testIfExceptionIsRaisedWhenBadInputFileIsProvided()
     {
-        $managerMock = $this
-            ->getMockBuilder('\Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $doctrineMock = $this
-            ->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $doctrineMock
-            ->expects($this->once())
-            ->method('getManager')
-            ->will($this->returnValue($managerMock));
-
-        $csvImporter = new CsvImporter($doctrineMock);
-
-        $csvImporter->import($this->getCsvFilePath('bad-data'), 301, true);
+        $this->managerMock->expects($this->never())->method('persist');
+        $this->managerMock->expects($this->never())->method('flush');
+        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $this->csvImporter->import($this->getCsvFilePath('bad-data'), 301, true, $outputMock);
     }
 
     /**

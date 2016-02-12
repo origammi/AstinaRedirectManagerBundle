@@ -1,10 +1,11 @@
 <?php
 namespace Astina\Bundle\RedirectManagerBundle\Service;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\EntityManager;
+use Astina\Bundle\RedirectManagerBundle\Validator\MapValidator;
 
 /**
- * Class CsvImporter
+ * Class BaseService
  *
  * @package   Astina\Bundle\RedirectManagerBundle\Service
  * @author    Matej Velikonja <mvelikonja@astina.ch>
@@ -13,16 +14,22 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 abstract class BaseService
 {
     /**
-     * @var RegistryInterface
+     * @var EntityManager
      */
-    private $doctrine;
+    private $entityManager;
 
     /**
-     * @param RegistryInterface $doctrine
+     * @var MapValidator
      */
-    public function __construct(RegistryInterface $doctrine)
+    private $mapValidator;
+
+    /**
+     * @param EntityManager $entityManager
+     */
+    public function __construct(EntityManager $entityManager, MapValidator $mapValidator)
     {
-        $this->doctrine = $doctrine;
+        $this->entityManager = $entityManager;
+        $this->mapValidator = $mapValidator;
     }
 
     /**
@@ -32,6 +39,16 @@ abstract class BaseService
      */
     protected function getEm()
     {
-        return $this->doctrine->getManager('redirect');
+        return $this->entityManager;
+    }
+
+    /**
+     * Returns Doctrine's entity manager.
+     *
+     * @return \Doctrine\ORM\EntityManager
+     */
+    protected function getValidator()
+    {
+        return $this->mapValidator;
     }
 }

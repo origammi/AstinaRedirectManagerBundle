@@ -31,7 +31,10 @@ class MapValidator
             return false;
         }
         $self = $this;
-        $accumulator = [$map->getId() => $map->getId()];
+        $accumulator = [];
+        if ($map->getId()) {
+            $accumulator = [$map->getId() => $map->getId()];
+        }
         $recurse = function(Map $map, Map $startPointMap) use ($self, &$recurse, &$accumulator) {
             $matchingToUrls = $self->mapRepository->findForUrlOrPath($map->getUrlTo(), $map->getUrlTo(), $accumulator);
             foreach ($matchingToUrls as $match) {

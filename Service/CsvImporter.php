@@ -1,6 +1,7 @@
 <?php
 namespace Astina\Bundle\RedirectManagerBundle\Service;
 
+use Symfony\Component\Console\Output\OutputInterface;
 use Astina\Bundle\RedirectManagerBundle\Entity\Map;
 use Astina\Bundle\RedirectManagerBundle\Service\Exception\CsvImporterException;
 
@@ -19,11 +20,12 @@ class CsvImporter extends BaseService
      * @param string $file
      * @param int    $redirectCode
      * @param bool   $countRedirects
+     * @param OutputInterface $output
      *
      * @throws Exception\CsvImporterException
      * @return int
      */
-    public function import($file, $redirectCode, $countRedirects)
+    public function import($file, $redirectCode, $countRedirects, OutputInterface $output)
     {
         $count = 0;
         if (($handle = fopen($file, 'r')) !== false) {
@@ -44,9 +46,12 @@ class CsvImporter extends BaseService
                     ->setRedirectHttpCode($redirectCode)
                     ->setCountRedirects($countRedirects);
 
-                $em->persist($map);
-
-                $count++;
+                if ($this->getValidator()->validate($map)) {
+                    $em->persist($map);
+                    $count++;
+                } else {
+                    $output->writeln('<error>Circular redirect detected for ' . $map->getUrlTo() . '</error>');
+                }
             }
             fclose($handle);
 
