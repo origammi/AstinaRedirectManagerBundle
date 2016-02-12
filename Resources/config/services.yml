@@ -8,7 +8,7 @@ parameters:
 services:
     armb.csv_importer:
         class: %armb.service.csv_importer%
-        arguments: [@doctrine]
+        arguments: [@armb.em, @armb.map_validator]
     armb.redirect_finder:
         class: %armb.redirect_finder.class%
         arguments: [@armb.em]
