@@ -82,11 +82,14 @@ class MapRepository extends EntityRepository
      */
     public function findCandidatesForUrlOrPath($url, $path)
     {
-        return $this->createQueryBuilder('m')
-            ->where('m.urlFrom = :path')
-            ->orWhere('m.urlFrom = :url')
-            ->orWhere('m.urlFromIsRegexPattern is not null')
-            ->orWhere('m.urlFromIsRegexPattern = 0')
+        $qb = $this->createQueryBuilder('m');
+        $expr = $qb->expr();
+        return $qb->where(
+                $expr->orX('m.urlFrom = :path', 'm.urlFrom = :url')
+            )
+            ->orWhere(
+                $expr->andX('m.urlFromIsRegexPattern is not null', 'm.urlFromIsRegexPattern <> 0')
+            )
             ->setParameter('path', $path)
             ->setParameter('url', $url)
             ->leftJoin('m.group', 'g')
