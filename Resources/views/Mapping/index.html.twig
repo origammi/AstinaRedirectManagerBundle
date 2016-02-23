@@ -108,12 +108,11 @@
     </div>
 {% endblock %}
 
-{% macro truncateMiddle(string) %}
-
-    {% if string| length  >= 20 %}
-        {% set string =  string|truncate(20)  ~ string|slice(string|length - 10)%}
+{% macro truncateMiddle(string, minLength = 25) %}
+{% spaceless %}
+    {% if string|length  > (minLength + 10) %}
+        {% set string =  string|truncate(minLength)  ~ string|slice(string|length - 10) %}
     {% endif %}
-
     {{ string }}
-
+{% endspaceless %}
 {% endmacro %}
