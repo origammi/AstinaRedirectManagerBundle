@@ -1,0 +1,11 @@
+{% set totalPages = (paginator.count / pageSize)|ceil %}
+{% set currentPage = page %}
+{% if totalPages > pageSize %}
+    <div class="pagination">
+        <ul>
+            {% for page in 1..totalPages %}
+                <li{% if page == currentPage %} class="active"{% endif %}><a href="{{ url('armb_homepage', app.request.query.all|merge({page: page})) }}">{{ page }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

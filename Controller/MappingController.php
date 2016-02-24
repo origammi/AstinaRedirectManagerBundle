@@ -33,13 +33,17 @@ class MappingController extends Controller
     public function indexAction(Request $request)
     {
         $search = $request->get('search');
+        $page = (int)$request->get('page', 1);
 
-        $maps = $this->getMapRepository()->search($search);
+        $maps = $this->getMapRepository()->search($page, $search);
 
         $groupedMaps = $this->groupMaps($maps);
 
         return array(
             'grouped_maps' => $groupedMaps,
+            'paginator' => $maps,
+            'page' => $page,
+            'pageSize' => MapRepository::PAGE_SIZE,
             'layout' => $this->container->getParameter('armb.base_layout'),
             'search' => $search,
         );

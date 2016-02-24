@@ -3,6 +3,7 @@
 namespace Astina\Bundle\RedirectManagerBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * Class MapRepository
@@ -13,6 +14,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class MapRepository extends EntityRepository
 {
+    const PAGE_SIZE = 50;
+
     public function findAll()
     {
         return $this->createQueryBuilder('m')
@@ -24,12 +27,15 @@ class MapRepository extends EntityRepository
         ;
     }
 
-    public function search($term = null)
+    public function search($page, $term = null)
     {
+        $page <= 0 && $page = 1;
         $qb = $this->createQueryBuilder('m')
             ->leftJoin('m.group', 'g')
             ->orderBy('g.priority')
             ->addOrderBy('m.urlFrom')
+            ->setFirstResult(($page - 1) * self::PAGE_SIZE)
+            ->setMaxResults(self::PAGE_SIZE)
         ;
 
         if (null !== $term) {
@@ -42,10 +48,7 @@ class MapRepository extends EntityRepository
             ;
         }
 
-        return $qb
-            ->getQuery()
-            ->getResult()
-        ;
+        return new Paginator($qb->getQuery(), true);
     }
 
     /**
