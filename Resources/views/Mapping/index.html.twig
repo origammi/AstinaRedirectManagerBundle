@@ -43,19 +43,19 @@
                         <tr>
                             <td>
                                 {% if map.urlFromIsRegexPattern %}
-                                    {{ map.urlFrom }}
+                                    {{ _self.truncateMiddle(map.urlFrom) }}
                                 {% else %}
-                                    <a target="_blank" href="{{ map.urlFrom }}">{{ map.urlFrom }}</a>
+                                    <a target="_blank" href="{{ map.urlFrom }}">{{ _self.truncateMiddle(map.urlFrom) }}</a>
                                 {% endif %}
                                 {% if map.comment|trim %}
-                                    <p class="muted">{{ map.comment|nl2br }}</p>
+                                    <p class="muted">{{ map.comment|nl2br|truncate(50) }}</p>
                                 {% endif %}
                             </td>
                             <td>
                                 {% if map.urlToContainsPlaceholders %}
-                                    {{ map.urlTo }}
+                                    {{ _self.truncateMiddle(map.urlTo) }}
                                 {% else %}
-                                    <a target="_blank" href="{{ map.urlTo }}">{{ map.urlTo }}</a>
+                                    <a target="_blank" href="{{ map.urlTo }}">{{ _self.truncateMiddle(map.urlTo) }}</a>
                                 {% endif %}
                             </td>
                             <td>
@@ -74,7 +74,7 @@
                             </td>
                             <td>
                                 <a href="{{ path('armb_edit_map', {id:map.id}) }}" class="btn btn-info btn"><i class="icon-pencil"></i></a>
-                                <a href="#deleteRedirect" class="delete btn btn-danger btn" data-toggle="modal" data-deleteurl="{{ path('armb_delete_map', {id:map.id}) }}"><i class="icon-trash icon-white"></i></a>
+                                <a href="#deleteRedirect" class="delete btn btn-danger btn" data-toggle="modal" data-deleteurl="{{ path('armb_delete_map', {id:map.id}) }}" data-target="#deleteRedirect"><i class="icon-trash icon-white"></i></a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -91,7 +91,7 @@
         </p>
     {% endif %}
     <!-- Modal -->
-    <div id="deleteRedirect" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="deleteRedirect" class="modal fade" role="dialog" aria-labelledby="myModalLabel" >
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3>{{ 'modal.delete.title' | trans }}</h3>
@@ -107,3 +107,12 @@
         </div>
     </div>
 {% endblock %}
+
+{% macro truncateMiddle(string, minLength = 25) %}
+{% spaceless %}
+    {% if string|length  > (minLength + 10) %}
+        {% set string =  string|truncate(minLength)  ~ string|slice(string|length - 10) %}
+    {% endif %}
+    {{ string }}
+{% endspaceless %}
+{% endmacro %}

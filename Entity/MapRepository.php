@@ -3,6 +3,7 @@
 namespace Astina\Bundle\RedirectManagerBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * Class MapRepository
@@ -13,6 +14,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class MapRepository extends EntityRepository
 {
+    const PAGE_SIZE = 50;
+
     public function findAll()
     {
         return $this->createQueryBuilder('m')
@@ -24,12 +27,15 @@ class MapRepository extends EntityRepository
         ;
     }
 
-    public function search($term = null)
+    public function search($page, $term = null)
     {
+        $page <= 0 && $page = 1;
         $qb = $this->createQueryBuilder('m')
             ->leftJoin('m.group', 'g')
             ->orderBy('g.priority')
             ->addOrderBy('m.urlFrom')
+            ->setFirstResult(($page - 1) * self::PAGE_SIZE)
+            ->setMaxResults(self::PAGE_SIZE)
         ;
 
         if (null !== $term) {
@@ -42,30 +48,32 @@ class MapRepository extends EntityRepository
             ;
         }
 
-        return $qb
-            ->getQuery()
-            ->getResult()
-        ;
+        return new Paginator($qb->getQuery(), true);
     }
 
     /**
      * @param string $url
      * @param string $path
+     * @param $excludeIds Optionally exclude records matching ids
      *
      * @return Map[]
      */
-    public function findForUrlOrPath($url, $path)
+    public function findForUrlOrPath($url, $path, array $excludeIds = [])
     {
-        return $this->createQueryBuilder('m')
+        $qb = $this->createQueryBuilder('m')
             ->where('m.urlFrom = :path')
             ->orWhere('m.urlFrom = :url')
             ->setParameter('path', $path)
             ->setParameter('url', $url)
             ->leftJoin('m.group', 'g')
             ->orderBy('g.priority')
-            ->addOrderBy('m.urlFrom', 'desc') // urls starting with "http" will be sorted before urls starting with "/"
-            ->getQuery()
-            ->getResult();
+            ->addOrderBy('m.urlFrom', 'desc'); // urls starting with "http" will be sorted before urls starting with "/"
+        if (\count($excludeIds)) {
+            $qb->andWhere('m.id NOT IN(:excludeIds)');
+            $qb->setParameter('excludeIds', $excludeIds);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -77,11 +85,14 @@ class MapRepository extends EntityRepository
      */
     public function findCandidatesForUrlOrPath($url, $path)
     {
-        return $this->createQueryBuilder('m')
-            ->where('m.urlFrom = :path')
-            ->orWhere('m.urlFrom = :url')
-            ->orWhere('m.urlFromIsRegexPattern is not null')
-            ->orWhere('m.urlFromIsRegexPattern = 0')
+        $qb = $this->createQueryBuilder('m');
+        $expr = $qb->expr();
+        return $qb->where(
+                $expr->orX('m.urlFrom = :path', 'm.urlFrom = :url')
+            )
+            ->orWhere(
+                $expr->andX('m.urlFromIsRegexPattern is not null', 'm.urlFromIsRegexPattern <> 0')
+            )
             ->setParameter('path', $path)
             ->setParameter('url', $url)
             ->leftJoin('m.group', 'g')

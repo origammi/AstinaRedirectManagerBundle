@@ -3,19 +3,15 @@ parameters:
     armb.subdomain.class: Astina\Bundle\RedirectManagerBundle\EventListener\SubDomainListener
     armb.service.csv_importer: Astina\Bundle\RedirectManagerBundle\Service\CsvImporter
     armb.redirect_finder.class: Astina\Bundle\RedirectManagerBundle\Redirect\RedirectFinder
+    armb.map_validator.class: Astina\Bundle\RedirectManagerBundle\Validator\MapValidator
 
 services:
-    armb.router:
-        class: %armb.redirect.class%
-        arguments: [@armb.redirect_finder]
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 512 }
-    armb.subdomain:
-        class: %armb.subdomain.class%
-        arguments: [@router, %router.request_context.host% ]
     armb.csv_importer:
         class: %armb.service.csv_importer%
-        arguments: [@doctrine]
+        arguments: [@armb.em, @armb.map_validator]
     armb.redirect_finder:
         class: %armb.redirect_finder.class%
-        arguments: [@doctrine]
+        arguments: [@armb.em]
+    armb.map_validator:
+        class: %armb.map_validator.class%
+        arguments: [@armb.em]

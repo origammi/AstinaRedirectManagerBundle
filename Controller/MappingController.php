@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Astina\Bundle\RedirectManagerBundle\Form\Type\MapFormType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,13 +33,18 @@ class MappingController extends Controller
     public function indexAction(Request $request)
     {
         $search = $request->get('search');
+        $page = (int)$request->get('page', 1);
 
-        $maps = $this->getMapRepository()->search($search);
+        $maps = $this->getMapRepository()->search($page, $search);
 
         $groupedMaps = $this->groupMaps($maps);
 
         return array(
             'grouped_maps' => $groupedMaps,
+            'paginator' => $maps,
+            'page' => $page,
+            'pageSize' => MapRepository::PAGE_SIZE,
+            'layout' => $this->container->getParameter('armb.base_layout'),
             'search' => $search,
         );
     }
@@ -56,6 +62,10 @@ class MappingController extends Controller
         $form = $this->createForm(new MapFormType(), $map);
 
         if ($form->handleRequest($request)->isValid()) {
+            if (!$this->get('armb.map_validator')->validate($map)) {
+                $this->addFlash('error', 'mapping.flash.map_circular_redirect.error');
+                return $this->createView($form, $map);
+            }
             $em  = $this->getEm();
             $em->persist($map);
             try {
@@ -69,10 +79,7 @@ class MappingController extends Controller
             return $this->redirect($this->generateUrl('armb_homepage'));
         }
 
-        return array(
-            'form' => $form->createView(),
-            'map'  => $map,
-        );
+        return $this->createView($form, $map);
     }
 
     /**
@@ -87,6 +94,10 @@ class MappingController extends Controller
         $form = $this->createForm(new MapFormType(), $map);
 
         if ($form->handleRequest($request)->isValid()) {
+            if (!$this->get('armb.map_validator')->validate($map)) {
+                $this->addFlash('error', 'mapping.flash.map_circular_redirect.error');
+                return $this->createView($form, $map);
+            }
             try {
                 $em = $this->getEm();
                 $em->flush();
@@ -99,8 +110,18 @@ class MappingController extends Controller
             return $this->redirect($this->generateUrl('armb_homepage'));
         }
 
+        return $this->createView($form, $map);
+    }
+
+    /**
+     * @param Form $form
+     * @param Map $map
+     * @return array
+     */
+    private function createView(Form $form, Map $map) {
         return array(
             'form' => $form->createView(),
+            'layout' => $this->container->getParameter('armb.base_layout'),
             'map'  => $map,
         );
     }
@@ -128,7 +149,7 @@ class MappingController extends Controller
      */
     private function getMapRepository()
     {
-        return $this->getDoctrine()->getRepository('AstinaRedirectManagerBundle:Map');
+        return $this->getEm()->getRepository('AstinaRedirectManagerBundle:Map');
     }
 
     /**
@@ -138,7 +159,7 @@ class MappingController extends Controller
      */
     private function getEm()
     {
-        return $this->getDoctrine()->getManager();
+        return $this->get('armb.em');
     }
 
     /**
@@ -158,7 +179,7 @@ class MappingController extends Controller
     private function groupMaps($maps)
     {
         /** @var Group[] $groups */
-        $groups = $this->getDoctrine()->getRepository('AstinaRedirectManagerBundle:Group')->findBy(array(), array('priority' => 'asc'));
+        $groups = $this->getEm()->getRepository('AstinaRedirectManagerBundle:Group')->findBy(array(), array('priority' => 'asc'));
 
         $groupedMaps = array();
         foreach ($maps as $map) {

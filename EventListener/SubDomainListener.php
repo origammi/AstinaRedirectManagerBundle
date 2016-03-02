@@ -54,7 +54,7 @@ class SubDomainListener
         $this->domain       = $domain;
         $this->pathName     = $pathName;
         $this->pathParams   = $pathParams;
-        $this->redirectCode = $redirectCode;
+        $this->redirectCode = $redirectCode;        
     }
 
     /**

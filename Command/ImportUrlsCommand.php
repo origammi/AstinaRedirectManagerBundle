@@ -63,7 +63,7 @@ class ImportUrlsCommand extends ContainerAwareCommand
             /** @var CsvImporter $doctrine */
             $csvImporter = $this->getContainer()->get('armb.csv_importer');
 
-            $count = $csvImporter->import($file, $redirectCode, $countRedirects);
+            $count = $csvImporter->import($file, $redirectCode, $countRedirects, $output);
 
             $output->writeln(sprintf('<info>Successfully imported %d url redirects.</info>', $count));
 

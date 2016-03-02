@@ -57,8 +57,19 @@ sure you have translator enabled in your config.
 framework:
     translator: ~
 ```
+### Step 5: Configuration Options
 
-### Step 5: Update your DB schema
+In an application with multiple entity managers please [configure a new manager](http://symfony.com/doc/current/cookbook/doctrine/multiple_entity_managers.html) or ensure the default manager can access the schema.
+```yml
+# app/config/config.yml
+astina_redirect_manager:
+    storage:
+      entity_manager: redirect # Optional entity manager name, if ommitted default entity manager is used
+    base_layout: "SomeBundle:SomeDir:index.html.twig"    # Override default Astina layout
+    enable_listeners: false # Set to false to disable redirect listeners. Useful for service oriented architectures. Defaults to true
+```
+
+### Step 6: Update your DB schema
 
 ``` bash
 $ php app/console doctrine:schema:update --force
