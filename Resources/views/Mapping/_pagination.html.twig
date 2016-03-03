@@ -1,6 +1,6 @@
 {% set totalPages = (paginator.count / pageSize)|ceil %}
 {% set currentPage = page %}
-{% if totalPages > pageSize %}
+{% if totalPages > 1 %}
     <div class="pagination">
         <ul>
             {% for page in 1..totalPages %}
