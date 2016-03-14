@@ -81,6 +81,11 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        {% block armb_pagination %}
+            {% include "AstinaRedirectManagerBundle:Mapping:_pagination.html.twig" %}
+        {% endblock %}
+
     {% else %}
         <div class="alert alert-block">
             <h4>{{ 'list.no_redirects.title' | trans }}</h4>
