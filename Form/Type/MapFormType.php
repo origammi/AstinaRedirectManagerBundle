@@ -2,9 +2,14 @@
 
 namespace Astina\Bundle\RedirectManagerBundle\Form\Type;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class MapFormType
@@ -28,52 +33,52 @@ class MapFormType extends AbstractType
         }
 
         $builder
-            ->add('urlFrom', 'text', array(
+            ->add('urlFrom', TextType::class, array(
                 'label' => 'form.urlFrom',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
             ))
-            ->add('urlFromIsRegexPattern', 'checkbox', array(
+            ->add('urlFromIsRegexPattern', CheckboxType::class, array(
                 'label' => 'form.urlFromIsRegexPattern',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
                 'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
-            ->add('urlFromIsNoCase', 'checkbox', array(
+            ->add('urlFromIsNoCase', CheckboxType::class, array(
                 'label' => 'form.urlFromIsNoCase',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
                 'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
-            ->add('urlTo', 'text', array(
+            ->add('urlTo', TextType::class, array(
                 'label' => 'form.urlTo',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
             ))
-            ->add('group', 'entity', array(
+            ->add('group', EntityType::class, array(
                 'label' => 'form.group',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
-                'property' => 'name',
+                'choice_label' => 'name',
                 'class' => 'AstinaRedirectManagerBundle:Group',
             ))
-            ->add('host', 'text', array(
+            ->add('host', TextType::class, array(
                 'label' => 'form.host',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
                 'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
-            ->add('hostIsRegexPattern', 'checkbox', array(
+            ->add('hostIsRegexPattern', CheckboxType::class, array(
                 'label' => 'form.hostIsRegexPattern',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
                 'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
-            ->add('hostRegexPatternNegate', 'checkbox', array(
+            ->add('hostRegexPatternNegate', CheckboxType::class, array(
                 'label' => 'form.hostRegexPatternNegate',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
                 'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
-            ->add('redirectHttpCode', 'choice', array(
+            ->add('redirectHttpCode', ChoiceType::class, array(
                 'label' => 'form.redirectHttpCode',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'choices' => array(
@@ -83,12 +88,12 @@ class MapFormType extends AbstractType
                 ),
                 'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
             ))
-            ->add('countRedirects', 'checkbox', array(
+            ->add('countRedirects', CheckboxType::class, array(
                 'label' => 'form.countRedirects',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
             ))
-            ->add('comment', 'textarea', array(
+            ->add('comment', TextareaType::class, array(
                 'label' => 'form.comment',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
                 'required' => false,
@@ -97,7 +102,12 @@ class MapFormType extends AbstractType
         ;
     }
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    /**
+     * Configures the options for this type.
+     *
+     * @param OptionsResolver $resolver The resolver for the options.
+     */
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Astina\Bundle\RedirectManagerBundle\Entity\Map'
@@ -116,13 +126,5 @@ class MapFormType extends AbstractType
         return array(
             'data_class' => 'Astina\Bundle\RedirectManagerBundle\Entity\Map'
         );
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'armb_map_type';
     }
 }

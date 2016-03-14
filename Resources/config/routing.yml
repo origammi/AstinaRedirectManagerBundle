@@ -1,31 +1,29 @@
 armb_homepage:
-    pattern:  /
+    path:  /
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:index }
 
 armb_new_map:
-    pattern:  /new
+    path:  /new
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:new }
 
 armb_edit_map:
-    pattern:  /{id}/edit
+    path:  /{id}/edit
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:edit }
 
 armb_delete_map:
-    pattern:  /{id}/delete
+    path:  /{id}/delete
     defaults: { _controller: AstinaRedirectManagerBundle:Mapping:delete }
-    requirements:
-        _method:  POST
+    methods:  [POST]
 
 armg_group_new:
-    pattern: /group/new
+    path: /group/new
     defaults: { _controller: AstinaRedirectManagerBundle:Group:form }
 
 armg_group_edit:
-    pattern: /group/{id}/edit
+    path: /group/{id}/edit
     defaults: { _controller: AstinaRedirectManagerBundle:Group:form }
 
 armg_group_delete:
-    pattern: /group/{id}/delete
+    path: /group/{id}/delete
     defaults: { _controller: AstinaRedirectManagerBundle:Group:delete }
-    requirements:
-        _method:  POST
+    methods:  [POST]

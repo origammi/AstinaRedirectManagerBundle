@@ -91,7 +91,7 @@ class MappingController extends Controller
      */
     public function editAction(Map $map, Request $request)
     {
-        $form = $this->createForm(new MapFormType(), $map);
+        $form = $this->createForm(MapFormType::class, $map);
 
         if ($form->handleRequest($request)->isValid()) {
             if (!$this->get('armb.map_validator')->validate($map)) {
