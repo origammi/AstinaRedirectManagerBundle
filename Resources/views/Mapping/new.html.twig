@@ -2,7 +2,7 @@
 {% trans_default_domain "AstinaRedirectManagerBundle" %}
 
 {% block armb_content  %}
-    <form action="{{ path('armb_new_map') }}" method="post" {{ form_enctype(form) }} novalidate>
+    {{ form_start(form, {'action': path('armb_new_map'), 'method': 'POST', 'attr': {'novalidate': 'novalidate'}}) }}
         {{ form_widget(form) }}
         <hr />
         <div class="control-group">
@@ -12,5 +12,5 @@
             <input class="btn btn-primary" type="submit" value= "{{ "form.submit" | trans }}" />
             <a href="{{ path('armb_homepage') }}" class="btn">{{ 'form.abort' | trans }}</a>
         </div>
-    </form>
+    {{ form_end(form) }}
 {% endblock %}

@@ -17,7 +17,7 @@ class GroupController extends Controller
             $group = new Group();
         }
 
-        $form = $this->createForm(new GroupFormType(), $group);
+        $form = $this->createForm(GroupFormType::class, $group);
 
         if ($form->handleRequest($request)->isValid()) {
 

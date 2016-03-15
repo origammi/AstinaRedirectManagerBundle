@@ -5,13 +5,14 @@
 
     <h2>{{ (group.id? 'list.edit_group' : 'list.new_group') | trans }}</h2>
 
-    <form action="{{ group.id ? path('armg_group_edit', {'id': group.id}) : path('armg_group_new') }}" method="post" {{ form_enctype(form) }} novalidate>
+    {% set action = group.id ? path('armg_group_edit', {'id': group.id}) : path('armg_group_new') %}
+    {{ form_start(form, {'action': action, 'method': 'POST', 'attr': {'novalidate': 'novalidate'}}) }}
         {{ form_widget(form) }}
         <div class="form-actions">
             <input class="btn btn-primary" type="submit" value="{{ (group.id? 'form.edit' : 'form.submit') | trans }}" />
             <a href="{{ path('armb_homepage') }}" class="btn">{{ 'form.abort' | trans }}</a>
         </div>
-    </form>
+    {{ form_end(form) }}
 
     {% if group.id %}
         <hr />
