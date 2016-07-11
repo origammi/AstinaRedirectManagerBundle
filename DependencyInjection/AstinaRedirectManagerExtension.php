@@ -55,6 +55,8 @@ class AstinaRedirectManagerExtension extends Extension
         if (true === $config['enable_listeners']) {
             $this->addEventListenersDefinitions($container);
         }
+
+        $container->setParameter('armb.pagesize', $config['pagesize']);
     }
 
     /**

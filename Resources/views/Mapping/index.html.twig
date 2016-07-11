@@ -12,7 +12,10 @@
         <form method="get" action="{{ path('armb_homepage') }}" class="form-inline">
             <div class="input-append">
                 <input type="text" name="search" value="{{ search }}">
-                <button type="submit" class="btn"><i class="icon-search"></i></button>
+                <button type="submit" class="btn" name="action" value="search"><i class="icon-search"></i></button>
+                {% if search %}
+                <button type="submit" class="btn" name="action" value="remove"><i class="icon-remove"></i></button>
+                {% endif %}
             </div>
         </form>
 
@@ -29,11 +32,11 @@
             </thead>
             <tbody>
                 {% for group_maps in grouped_maps %}
-                    {% if group_maps.group is defined %}
+                    {% if group_maps.group is defined and group_maps.maps|length>0 %}
                         <tr>
                             <td colspan="6">
                                 <h3>
-                                    {{ group_maps.group.name }}
+                                    <a href="{{ path('armb_homepage') }}?search={{ group_maps.group.name }}">{{ group_maps.group.name }}</a>
                                     <a href="{{ path('armg_group_edit', {'id': group_maps.group.id}) }}" class="btn btn-link"><i class="icon-pencil"></i></a>
                                 </h3>
                             </td>

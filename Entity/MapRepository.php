@@ -14,7 +14,6 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class MapRepository extends EntityRepository
 {
-    const PAGE_SIZE = 50;
 
     public function findAll()
     {
@@ -27,16 +26,23 @@ class MapRepository extends EntityRepository
         ;
     }
 
-    public function search($page, $term = null)
+    public function search($term = null, $page, $pageSize)
     {
-        $page <= 0 && $page = 1;
+        if ($page <= 0) {
+            $page = 1;
+        }
+
         $qb = $this->createQueryBuilder('m')
             ->leftJoin('m.group', 'g')
-            ->orderBy('g.priority')
-            ->addOrderBy('m.urlFrom')
-            ->setFirstResult(($page - 1) * self::PAGE_SIZE)
-            ->setMaxResults(self::PAGE_SIZE)
+            ->addOrderBy('g.priority')
+            ->addOrderBy('m.urlFrom');
         ;
+
+        if ($pageSize) {
+            $qb
+                ->setFirstResult(($page - 1) * $pageSize)
+                ->setMaxResults($pageSize);
+        }
 
         if (null !== $term) {
             $qb
@@ -68,6 +74,7 @@ class MapRepository extends EntityRepository
             ->leftJoin('m.group', 'g')
             ->orderBy('g.priority')
             ->addOrderBy('m.urlFrom', 'desc'); // urls starting with "http" will be sorted before urls starting with "/"
+
         if (\count($excludeIds)) {
             $qb->andWhere('m.id NOT IN(:excludeIds)');
             $qb->setParameter('excludeIds', $excludeIds);
@@ -87,6 +94,7 @@ class MapRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('m');
         $expr = $qb->expr();
+
         return $qb->where(
                 $expr->orX('m.urlFrom = :path', 'm.urlFrom = :url')
             )
@@ -118,4 +126,5 @@ class MapRepository extends EntityRepository
 
         return current($maps);
     }
+
 }
