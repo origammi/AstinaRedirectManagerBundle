@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class MappingController extends Controller
 {
+
     /**
      * @Template()
      *
@@ -32,10 +33,14 @@ class MappingController extends Controller
      */
     public function indexAction(Request $request)
     {
+        if ($request->get('action') == 'remove') {
+            return $this->redirect($this->generateUrl('armb_homepage'));
+        }
+
         $search = $request->get('search');
         $page = (int)$request->get('page', 1);
-
-        $maps = $this->getMapRepository()->search($page, $search);
+        $pageSize = $this->container->getParameter('armb.pagesize');
+        $maps = $this->getMapRepository()->search($search, $page, $pageSize);
 
         $groupedMaps = $this->groupMaps($maps);
 
@@ -43,7 +48,7 @@ class MappingController extends Controller
             'grouped_maps' => $groupedMaps,
             'paginator' => $maps,
             'page' => $page,
-            'pageSize' => MapRepository::PAGE_SIZE,
+            'pageSize' => $pageSize,
             'layout' => $this->container->getParameter('armb.base_layout'),
             'search' => $search,
         );
@@ -71,7 +76,8 @@ class MappingController extends Controller
             try {
                 $em->flush();
                 $this->addFlash('success', 'mapping.flash.map_created.success');
-            } catch (\Exception $e) {
+            }
+            catch (\Exception $e) {
                 $this->addFlash('error', 'mapping.flash.map_created.error');
                 return $this->redirect($this->generateUrl('armb_new_map'));
             }
@@ -102,7 +108,8 @@ class MappingController extends Controller
                 $em = $this->getEm();
                 $em->flush();
                 $this->addFlash('success', 'mapping.flash.map_updated.success');
-            } catch (\Exception $e) {
+            }
+            catch (\Exception $e) {
                 $this->addFlash('error', 'mapping.flash.map_updated.error');
                 return $this->redirect($this->generateUrl('armb_edit_map', array('id' => $map->getId())));
             }
@@ -182,13 +189,16 @@ class MappingController extends Controller
         $groups = $this->getEm()->getRepository('AstinaRedirectManagerBundle:Group')->findBy(array(), array('priority' => 'asc'));
 
         $groupedMaps = array();
+
         foreach ($maps as $map) {
             if (null === $map->getGroup()) {
                 $groupedMaps['__none__']['maps'][] = $map;
             }
         }
+
         foreach ($groups as $group) {
             $groupedMaps[$group->getId()] = array('group' => $group, 'maps' => array());
+
             foreach ($maps as $map) {
                 if ($map->getGroup() && $map->getGroup()->getId() === $group->getId()) {
                     $groupedMaps[$group->getId()]['maps'][] = $map;
