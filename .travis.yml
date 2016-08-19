@@ -14,12 +14,17 @@ env:
     - SYMFONY_VERSION="3.0.*"
     - SYMFONY_VERSION="3.1.*"
 
-before_script:
+before_install:
+    - composer selfupdate
     - phpenv config-rm xdebug.ini
-    - composer require symfony/framework-bundle:${SYMFONY_VERSION}
-    - composer install --dev
     - pear install --alldeps PHP_CodeSniffer
     - phpenv rehash
+    - INI_FILE=~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
+    - echo memory_limit = -1 >> $INI_FILE
+
+install:
+    - composer install --dev
+    - composer require symfony/framework-bundle:${SYMFONY_VERSION}
 
 script:
   - phpunit
