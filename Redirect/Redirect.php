@@ -64,20 +64,24 @@ class Redirect
     public function matchesPath()
     {
         $urlFrom = $this->map->getUrlFrom();
-        $requestUri = $this->request->getRequestUri();
-        
+        if ($this->isAbsoluteUrl($urlFrom)) {
+            $matchUri = $this->request->getSchemeAndHttpHost() . $this->request->getRequestUri();
+        } else {
+            $matchUri = $this->request->getRequestUri();
+        }
+
         if (!$this->map->getUrlFromIsRegexPattern()) {
-            
+
             $strtolower = function_exists('mb_strtolower') ? 'mb_strtolower' : 'strtolower';
 
-            return $this->map->getUrlFromIsNoCase() ? 
-                $strtolower($urlFrom) === $strtolower($requestUri) : 
-                $urlFrom === $requestUri
-            ;
+            return $this->map->getUrlFromIsNoCase() ?
+                $strtolower($urlFrom) === $strtolower($matchUri) :
+                $urlFrom === $matchUri
+                ;
         }
 
         $regexModifier = $this->map->getUrlFromIsNoCase() ? 'i' : '';
-        return preg_match('#' . $urlFrom . '#'.$regexModifier, $requestUri, $this->patternMatches);
+        return preg_match('#' . $urlFrom . '#'.$regexModifier, $matchUri, $this->patternMatches);
     }
 
     protected function applyReplacements($redirectUrl)
@@ -106,6 +110,6 @@ class Redirect
      */
     protected function isAbsoluteUrl($url)
     {
-        return preg_match('/^https?:\/\//', $url);
+        return preg_match('/^https?:\/\//', $url) === 1;
     }
 }
