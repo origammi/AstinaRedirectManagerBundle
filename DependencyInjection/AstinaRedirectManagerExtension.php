@@ -28,32 +28,11 @@ class AstinaRedirectManagerExtension extends Extension
 
         $loader->load('services.yml');
 
-        // if redirect_subdomain is present, than we set up listener
-        if (isset($config['redirect_subdomains'])) {
-            $routerDefinition = $container->getDefinition('armb.router');
-            $routerDefinitionTag = $routerDefinition->getTag('kernel.event_listener');
-            $routerDefinitionTag = reset($routerDefinitionTag);
-
-            $subDomainDefinition = $container->getDefinition('armb.subdomain');
-            $subDomainDefinition->addTag(
-                'kernel.event_listener', array(
-                    'event' => 'kernel.request',
-                    'method' => 'onKernelRequest',
-                    'priority' => $routerDefinitionTag['priority'] - 1 //has to be lower than armb_router listener
-                )
-            );
-
-            // let's add customizable arguments
-            $subDomainDefinition->addArgument($config['redirect_subdomains']['route_name']);
-            $subDomainDefinition->addArgument($config['redirect_subdomains']['route_params']);
-            $subDomainDefinition->addArgument($config['redirect_subdomains']['redirect_code']);
-        }
-
         $container->setParameter('armb.base_layout', $config['base_layout']);
         $this->addStorageDefinition($container, $config['storage']['entity_manager']);
 
         if (true === $config['enable_listeners']) {
-            $this->addEventListenersDefinitions($container);
+            $this->addEventListenersDefinitions($container, $config);
         }
 
         $container->setParameter('armb.pagesize', $config['pagesize']);
@@ -76,7 +55,7 @@ class AstinaRedirectManagerExtension extends Extension
     /**
      * @param ContainerBuilder $container
      */
-    private function addEventListenersDefinitions(ContainerBuilder $container)
+    private function addEventListenersDefinitions(ContainerBuilder $container, array $config)
     {
         $container
             ->register('armb.router', '%armb.redirect.class%')
@@ -88,6 +67,27 @@ class AstinaRedirectManagerExtension extends Extension
             ->addArgument(new Reference('router'))
             ->addArgument('%router.request_context.host%')
         ;
+
+        // if redirect_subdomain is present, than we set up listener
+        if (isset($config['redirect_subdomains']) && $config['redirect_subdomains']['enabled']) {
+            $routerDefinition = $container->getDefinition('armb.router');
+            $routerDefinitionTag = $routerDefinition->getTag('kernel.event_listener');
+            $routerDefinitionTag = reset($routerDefinitionTag);
+
+            $subDomainDefinition = $container->getDefinition('armb.subdomain');
+            $subDomainDefinition->addTag(
+                'kernel.event_listener', array(
+                    'event' => 'kernel.request',
+                    'method' => 'onKernelRequest',
+                    'priority' => $routerDefinitionTag['priority'] - 1 //has to be lower than armb_router listener
+                )
+            );
+
+            // let's add customizable arguments
+            $subDomainDefinition->addArgument($config['redirect_subdomains']['route_name']);
+            $subDomainDefinition->addArgument($config['redirect_subdomains']['route_params']);
+            $subDomainDefinition->addArgument($config['redirect_subdomains']['redirect_code']);
+        }
     }
 
 }
