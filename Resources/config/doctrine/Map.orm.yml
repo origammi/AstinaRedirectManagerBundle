@@ -3,7 +3,7 @@ Astina\Bundle\RedirectManagerBundle\Entity\Map:
     table: armb_redirect_map
     repositoryClass: Astina\Bundle\RedirectManagerBundle\Entity\MapRepository
     uniqueConstraints:
-        host_urlFrom: { columns: [host, urlFrom] }
+        host_urlFrom: { columns: [host, url_from] }
     fields:
         id:
             type: integer
