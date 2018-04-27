@@ -29,6 +29,7 @@ class AstinaRedirectManagerExtension extends Extension
         $loader->load('services.yml');
 
         $container->setParameter('armb.base_layout', $config['base_layout']);
+        $container->setParameter('armb.default_http_code', $config['default_http_code']);
         $this->addStorageDefinition($container, $config['storage']['entity_manager']);
 
         if (true === $config['enable_listeners']) {
