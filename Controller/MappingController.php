@@ -64,7 +64,7 @@ class MappingController extends Controller
     public function newAction(Request $request)
     {
         $map = new Map();
-        $http_code = $this->getParameter('armb.default_http_code');
+        $http_code = $this->container->getParameter('armb.default_http_code');
         $map->setRedirectHttpCode($http_code);
         $form = $this->createForm(MapFormType::class, $map);
 
