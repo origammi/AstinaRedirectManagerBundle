@@ -65,9 +65,9 @@ class Redirect
     {
         $urlFrom = $this->map->getUrlFrom();
         if ($this->isAbsoluteUrl($urlFrom)) {
-            $matchUri = $this->request->getSchemeAndHttpHost() . $this->request->getRequestUri();
+            $matchUri = $this->request->getSchemeAndHttpHost() . urldecode($this->request->getRequestUri());
         } else {
-            $matchUri = $this->request->getRequestUri();
+            $matchUri = urldecode($this->request->getRequestUri());
         }
 
         if (!$this->map->getUrlFromIsRegexPattern()) {
