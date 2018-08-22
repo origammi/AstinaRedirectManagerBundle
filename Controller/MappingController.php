@@ -2,9 +2,9 @@
 
 namespace Astina\Bundle\RedirectManagerBundle\Controller;
 
+use Astina\Bundle\RedirectManagerBundle\Entity\Group;
 use Astina\Bundle\RedirectManagerBundle\Entity\MapRepository;
 use Astina\Bundle\RedirectManagerBundle\Entity\Map;
-use FOS\UserBundle\Entity\Group;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Astina\Bundle\RedirectManagerBundle\Form\Type\MapFormType;
 
@@ -26,8 +26,6 @@ class MappingController extends Controller
 {
 
     /**
-     * @Template()
-     *
      * @param Request $request
      * @return array
      */
@@ -44,20 +42,18 @@ class MappingController extends Controller
 
         $groupedMaps = $this->groupMaps($maps);
 
-        return array(
+        return $this->render('@AstinaRedirectManager/Mapping/index.html.twig', [
             'grouped_maps' => $groupedMaps,
             'paginator' => $maps,
             'page' => $page,
             'pageSize' => $pageSize,
             'layout' => $this->container->getParameter('armb.base_layout'),
             'search' => $search,
-        );
+        ]);
     }
 
     /**
      * @param Request $request
-     *
-     *  @Template()
      *
      * @return array|RedirectResponse
      */
@@ -71,7 +67,8 @@ class MappingController extends Controller
         if ($form->handleRequest($request)->isValid()) {
             if (!$this->get('armb.map_validator')->validate($map)) {
                 $this->addFlash('error', 'mapping.flash.map_circular_redirect.error');
-                return $this->createView($form, $map);
+                return $this->createView('@AstinaRedirectManager/Mapping/new.html.twig',
+                    $form, $map);
             }
             $em  = $this->getEm();
             $em->persist($map);
@@ -87,7 +84,8 @@ class MappingController extends Controller
             return $this->redirect($this->generateUrl('armb_homepage'));
         }
 
-        return $this->createView($form, $map);
+        return $this->createView('@AstinaRedirectManager/Mapping/new.html.twig',
+            $form, $map);
     }
 
     /**
@@ -104,7 +102,8 @@ class MappingController extends Controller
         if ($form->handleRequest($request)->isValid()) {
             if (!$this->get('armb.map_validator')->validate($map)) {
                 $this->addFlash('error', 'mapping.flash.map_circular_redirect.error');
-                return $this->createView($form, $map);
+                return $this->createView('@AstinaRedirectManager/Mapping/edit.html.twig',
+                    $form, $map);
             }
             try {
                 $em = $this->getEm();
@@ -119,20 +118,20 @@ class MappingController extends Controller
             return $this->redirect($this->generateUrl('armb_homepage'));
         }
 
-        return $this->createView($form, $map);
+        return $this->createView('@AstinaRedirectManager/Mapping/edit.html.twig',
+            $form, $map);
     }
 
     /**
      * @param Form $form
      * @param Map $map
-     * @return array
      */
-    private function createView(Form $form, Map $map) {
-        return array(
+    private function createView($template, Form $form, Map $map) {
+        return $this->render($template, [
             'form' => $form->createView(),
             'layout' => $this->container->getParameter('armb.base_layout'),
             'map'  => $map,
-        );
+        ]);
     }
 
     /**
