@@ -38,8 +38,9 @@ class RedirectFinder implements RedirectFinderInterface
      */
     public function findRedirect(Request $request)
     {
-        $path = str_replace($request->getBaseUrl(), '/', $request->getRequestUri());
-        $url = $request->getSchemeAndHttpHost() . $request->getRequestUri();
+        $requestUri = urldecode($request->getRequestUri());
+        $path = str_replace($request->getBaseUrl(), '/', $requestUri);
+        $url = $request->getSchemeAndHttpHost() . $requestUri;
 
         // find possible candidates for redirection
         /** @var MapRepository $repo */

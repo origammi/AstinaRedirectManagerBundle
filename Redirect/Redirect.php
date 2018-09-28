@@ -64,10 +64,11 @@ class Redirect
     public function matchesPath()
     {
         $urlFrom = $this->map->getUrlFrom();
+        $requestUri = urldecode($this->request->getRequestUri());
         if ($this->isAbsoluteUrl($urlFrom)) {
-            $matchUri = $this->request->getSchemeAndHttpHost() . $this->request->getRequestUri();
+            $matchUri = $this->request->getSchemeAndHttpHost() . $requestUri;
         } else {
-            $matchUri = $this->request->getRequestUri();
+            $matchUri = $requestUri;
         }
 
         if (!$this->map->getUrlFromIsRegexPattern()) {
