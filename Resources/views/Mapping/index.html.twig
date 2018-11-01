@@ -1,5 +1,6 @@
 {% extends "AstinaRedirectManagerBundle::content_layout.html.twig" %}
 {% trans_default_domain "AstinaRedirectManagerBundle" %}
+{% import  _self as truncate %}
 
 {% block armb_content  %}
     {% if grouped_maps | length > 0 or search %}
@@ -46,9 +47,9 @@
                         <tr>
                             <td>
                                 {% if map.urlFromIsRegexPattern %}
-                                    {{ _self.truncateMiddle(map.urlFrom) }}
+                                    {{ truncate.truncateMiddle(map.urlFrom) }}
                                 {% else %}
-                                    <a target="_blank" href="{{ map.urlFrom }}">{{ _self.truncateMiddle(map.urlFrom) }}</a>
+                                    <a target="_blank" href="{{ map.urlFrom }}">{{ truncate.truncateMiddle(map.urlFrom) }}</a>
                                 {% endif %}
                                 {% if map.comment|trim %}
                                     <p class="muted">{{ map.comment|nl2br|truncate(50) }}</p>
@@ -56,9 +57,9 @@
                             </td>
                             <td>
                                 {% if map.urlToContainsPlaceholders %}
-                                    {{ _self.truncateMiddle(map.urlTo) }}
+                                    {{ truncate.truncateMiddle(map.urlTo) }}
                                 {% else %}
-                                    <a target="_blank" href="{{ map.urlTo }}">{{ _self.truncateMiddle(map.urlTo) }}</a>
+                                    <a target="_blank" href="{{ map.urlTo }}">{{ truncate.truncateMiddle(map.urlTo) }}</a>
                                 {% endif %}
                             </td>
                             <td>
