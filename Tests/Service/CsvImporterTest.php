@@ -58,7 +58,7 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
         $this->managerMock->expects($this->exactly($importCount))->method('persist');
         $this->managerMock->expects($this->once())->method('flush');
 
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $outputMock = $this->createMock('Symfony\Component\Console\Output\OutputInterface');
 
         $result = $this->csvImporter->import($filePath, 301, true, $outputMock);
 
@@ -72,7 +72,7 @@ class CsvImporterTest extends \PHPUnit_Framework_TestCase
     {
         $this->managerMock->expects($this->never())->method('persist');
         $this->managerMock->expects($this->never())->method('flush');
-        $outputMock = $this->getMock('Symfony\Component\Console\Output\OutputInterface');
+        $outputMock = $this->createMock('Symfony\Component\Console\Output\OutputInterface');
         $this->csvImporter->import($this->getCsvFilePath('bad-data'), 301, true, $outputMock);
     }
 

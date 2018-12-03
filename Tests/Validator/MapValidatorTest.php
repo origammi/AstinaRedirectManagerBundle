@@ -32,7 +32,7 @@ class MapValidatorTest extends \PHPUnit_Framework_TestCase
         $this->mapRepository = $this->getMockBuilder('Astina\Bundle\RedirectManagerBundle\Entity\MapRepository')
             ->disableOriginalConstructor()
             ->getMock();
-        $mockEm = $this->getMock('Doctrine\ORM\EntityManagerInterface');
+        $mockEm = $this->createMock('Doctrine\ORM\EntityManagerInterface');
         $mockEm->expects($this->any())->method('getRepository')->will($this->returnValue($this->mapRepository));
         $this->mapValidator = new MapValidator($mockEm);
     }

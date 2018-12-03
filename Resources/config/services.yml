@@ -4,14 +4,21 @@ parameters:
     armb.service.csv_importer: Astina\Bundle\RedirectManagerBundle\Service\CsvImporter
     armb.redirect_finder.class: Astina\Bundle\RedirectManagerBundle\Redirect\RedirectFinder
     armb.map_validator.class: Astina\Bundle\RedirectManagerBundle\Validator\MapValidator
+    armb.map_form_type.class: Astina\Bundle\RedirectManagerBundle\Form\Type\MapFormType
+    armb.map.class: Astina\Bundle\RedirectManagerBundle\Entity\Map
 
 services:
     armb.csv_importer:
-        class: %armb.service.csv_importer%
+        class: '%armb.service.csv_importer%'
         arguments: ['@armb.em', '@armb.map_validator']
     armb.redirect_finder:
-        class: %armb.redirect_finder.class%
+        class: '%armb.redirect_finder.class%'
         arguments: ['@armb.em']
     armb.map_validator:
-        class: %armb.map_validator.class%
+        class: '%armb.map_validator.class%'
         arguments: ['@armb.em']
+    armb.map_form_type:
+        class: '%armb.map_form_type.class%'
+        arguments: ['%armb.show_map_redirect_counts%']
+        tags:
+          - { name: form.type }

@@ -64,6 +64,7 @@ class MappingController extends Controller
     public function newAction(Request $request)
     {
         $map = new Map();
+        $map->setCountRedirects($this->container->getParameter('armb.show_map_redirect_counts'));
         $form = $this->createForm(MapFormType::class, $map);
 
         if ($form->handleRequest($request)->isValid()) {

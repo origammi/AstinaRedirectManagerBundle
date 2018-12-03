@@ -53,7 +53,7 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $repoMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('findCandidatesForUrlOrPath')
             ->will($this->returnValue(array($map)));
 
@@ -65,10 +65,10 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
         $managerMock
             ->expects($this->once())
             ->method('persist')
-            ->with($map);        
+            ->with($map);
 
         $managerMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getRepository')
             ->will($this->returnValue($repoMock));
 
@@ -80,12 +80,18 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
         $eventMock = $this->getResponseEventMock($requestMock);
 
         $eventMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('setResponse');
 
         $redirectListener->onKernelRequest($eventMock);
 
         $this->assertEquals(1, $map->getCount(), 'Map count should be increased to 1.');
+
+        $map->setCountRedirects(false);
+
+        $redirectListener->onKernelRequest($eventMock);
+
+        $this->assertEquals(1, $map->getCount(), 'Map should remain 1.');
     }
 
     /**
@@ -163,7 +169,7 @@ class RedirectListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($requestMock));
 
         $event
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getRequestType')
             ->will($this->returnValue(HttpKernelInterface::MASTER_REQUEST));
 

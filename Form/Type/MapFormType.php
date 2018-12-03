@@ -2,6 +2,7 @@
 
 namespace Astina\Bundle\RedirectManagerBundle\Form\Type;
 
+use Astina\Bundle\RedirectManagerBundle\Entity\Map;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -21,8 +22,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class MapFormType extends AbstractType
 {
     /**
+     * @var bool
+     */
+    private $showMapRedirectCounts;
+
+    /**
+     * MapFormType constructor.
+     * @param bool $showMapRedirectCounts
+     */
+    public function __construct(bool $showMapRedirectCounts)
+    {
+        $this->showMapRedirectCounts = $showMapRedirectCounts;
+    }
+
+    /**
      * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -81,26 +96,28 @@ class MapFormType extends AbstractType
             ->add('redirectHttpCode', ChoiceType::class, array(
                 'label' => 'form.redirectHttpCode',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
-		'choices_as_values' => true,
+                'choices_as_values' => true,
                 'choices' => array(
                     '301 Moved Permanently' => 301,
                     '302 Found' => 302,
                     '303 See Other' => 303,
                 ),
                 'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
-            ))
-            ->add('countRedirects', CheckboxType::class, array(
+            ));
+        if ($this->showMapRedirectCounts) {
+            $builder->add('countRedirects', CheckboxType::class, array(
                 'label' => 'form.countRedirects',
                 'translation_domain' => 'AstinaRedirectManagerBundle',
+                'data' => true,
                 'required' => false,
-            ))
-            ->add('comment', TextareaType::class, array(
-                'label' => 'form.comment',
-                'translation_domain' => 'AstinaRedirectManagerBundle',
-                'required' => false,
-                'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
-            ))
-        ;
+            ));
+        }
+        $builder->add('comment', TextareaType::class, array(
+            'label' => 'form.comment',
+            'translation_domain' => 'AstinaRedirectManagerBundle',
+            'required' => false,
+            'attr' => $hideAdvancedSettings ? array('data-advanced-field' => '') : array(),
+        ));
     }
 
     /**
@@ -110,9 +127,7 @@ class MapFormType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Astina\Bundle\RedirectManagerBundle\Entity\Map'
-        ));
+        $resolver->setDefaults(['data_class' => Map::class]);
     }
 
     /**
@@ -122,10 +137,8 @@ class MapFormType extends AbstractType
      *
      * @return array
      */
-    public function getDefaultOptions(array $options)
+    public function getDefaultOptions(array $options) : array
     {
-        return array(
-            'data_class' => 'Astina\Bundle\RedirectManagerBundle\Entity\Map'
-        );
+        return ['data_class' => Map::class];
     }
 }

@@ -36,6 +36,7 @@ class AstinaRedirectManagerExtension extends Extension
         }
 
         $container->setParameter('armb.pagesize', $config['pagesize']);
+        $container->setParameter('armb.show_map_redirect_counts', $config['show_map_redirect_counts'] ?? true);
     }
 
     /**
