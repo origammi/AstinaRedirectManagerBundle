@@ -92,22 +92,32 @@ class MapRepository extends EntityRepository
      */
     public function findCandidatesForUrlOrPath($url, $path)
     {
-        $qb = $this->createQueryBuilder('m');
-        $expr = $qb->expr();
+        $sql = "SELECT m.* FROM armb_redirect_map m
+                WHERE m.urlFrom = :urlFrom 
+                OR m.urlFrom = :path 
+                OR (m.urlFromIsRegexPattern IS NOT NULL 
+                AND m.urlFromIsRegexPattern <> 0)";
 
-        return $qb->where(
-                $expr->orX('m.urlFrom = :path', 'm.urlFrom = :url')
-            )
-            ->orWhere(
-                $expr->andX('m.urlFromIsRegexPattern is not null', 'm.urlFromIsRegexPattern <> 0')
-            )
-            ->setParameter('path', $path)
-            ->setParameter('url', $url)
-            ->leftJoin('m.group', 'g')
-            ->orderBy('g.priority')
-            ->addOrderBy('m.urlFrom', 'desc') // urls starting with "http" will be sorted before urls starting with "/"
-            ->getQuery()
-            ->getResult();
+        $groups = $this->getGroups();
+
+        $maps = $this->_em->getConnection()->fetchAll($sql, ['urlFrom' => $url, 'path' => $path]);
+
+        $priority = [];
+        $urlFrom = [];
+        foreach ($maps as &$map) {
+            $map['priority'] = $groups[$map['group_id']] ?? 0;
+            $priority[] = $groups[$map['group_id']] ?? 0;
+            $urlFrom[] = $map['urlFrom'];
+        }
+
+        \array_multisort($priority, SORT_ASC, SORT_NUMERIC, $urlFrom, SORT_DESC, SORT_NATURAL, $maps);
+
+        $result = [];
+        foreach ($maps as $map) {
+            $result[] = $this->buildMapFromArray($map);
+        }
+
+        return $result;
     }
 
     /**
@@ -127,4 +137,62 @@ class MapRepository extends EntityRepository
         return current($maps);
     }
 
+    /**
+     * Get groups.
+     *
+     * @return array
+     */
+    private function getGroups()
+    {
+        $groups =  $this->_em->getConnection()->fetchAll('SELECT id, priority FROM armb_redirect_group');
+        return  \array_reduce($groups, function ($result, $item) {
+            $result[$item['id']] = $item['priority'];
+            return $result;
+        }, []);
+
+    }
+
+    /**
+     * Build map from array.
+     *
+     * @param array $data
+     * @return Map
+     * @throws \Exception
+     */
+    public function buildMapFromArray(array $data)
+    {
+        $m = new Map();
+        if (!empty($data['host'])) {
+            $m->setHost($data['host']);
+        }
+        if (!empty($data['hostIsRegexPattern'])) {
+            $m->setHostIsRegexPattern($data['hostIsRegexPattern']);
+        }
+        if (!empty($data['hostRegexPatternNegate'])) {
+            $m->setHostRegexPatternNegate($data['hostRegexPatternNegate']);
+        }
+        if (!empty($data['urlFrom'])) {
+            $m->setUrlFrom($data['urlFrom']);
+        }
+        if (!empty($data['urlFromIsRegexPattern'])) {
+            $m->setUrlFromIsRegexPattern($data['urlFromIsRegexPattern']);
+        }
+        if (!empty($data['urlFromIsNoCase'])) {
+            $m->setUrlFromIsNoCase($data['urlFromIsNoCase']);
+        }
+        if (!empty($data['urlTo'])) {
+            $m->setUrlTo($data['urlTo']);
+        }
+        if (!empty($data['count'])) {
+            $m->setCount($data['count']);
+        }
+        if (!empty($data['countRedirects'])) {
+            $m->setCountRedirects($data['countRedirects']);
+        }
+        if (!empty($data['redirectHttpCode'])) {
+            $m->setRedirectHttpCode($data['redirectHttpCode']);
+        }
+
+        return $m;
+    }
 }
