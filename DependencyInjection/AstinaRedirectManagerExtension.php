@@ -88,6 +88,7 @@ class AstinaRedirectManagerExtension extends Extension
             $subDomainDefinition->addArgument($config['redirect_subdomains']['route_name']);
             $subDomainDefinition->addArgument($config['redirect_subdomains']['route_params']);
             $subDomainDefinition->addArgument($config['redirect_subdomains']['redirect_code']);
+            $subDomainDefinition->addArgument($config['redirect_subdomains']['ignore_host']);
         }
     }
 

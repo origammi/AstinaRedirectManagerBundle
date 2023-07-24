@@ -42,19 +42,25 @@ class SubDomainListener
     private $redirectCode;
 
     /**
+     * @var array
+     */
+    private $ignoredSubdomains;
+
+    /**
      * @param Router $router
      * @param string $domain
      * @param string $pathName
      * @param array  $pathParams
      * @param int    $redirectCode
      */
-    public function __construct(Router $router, $domain, $pathName, array $pathParams, $redirectCode = 301)
+    public function __construct(Router $router, $domain, $pathName, array $pathParams, $redirectCode = 301, $ignoredSubdomains = [])
     {
         $this->router       = $router;
         $this->domain       = $domain;
         $this->pathName     = $pathName;
         $this->pathParams   = $pathParams;
         $this->redirectCode = $redirectCode;        
+        $this->ignoredSubdomains = $ignoredSubdomains;
     }
 
     /**
@@ -95,10 +101,13 @@ class SubDomainListener
      */
     private function getSubDomain($host)
     {
+        if (in_array($host, $this->ignoredSubdomains)) {
+            return null;
+        }
         $subDomain = str_ireplace($this->domain, '', $host);
         $subDomain = trim($subDomain, '.');
 
-        if (! strlen($subDomain)) {
+        if (! strlen($subDomain) || in_array($subDomain, $this->ignoredSubdomains)) {
             return null;
         }
 
